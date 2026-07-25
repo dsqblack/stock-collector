@@ -18,3 +18,5 @@ downloads/
 music-player/
 application.yml
 application-prod.yml
+/start-mysql.bat
+/start-mysql.sh

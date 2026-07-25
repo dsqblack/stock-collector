@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hermes Study</title>
+<title>hermes-study · 个人项目集</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -18,6 +18,25 @@
   --text: #0f172a;
   --text-sec: #475569;
   --text-muted: #94a3b8;
+
+  --brand-50: #eef2ff;
+  --brand-100: #dbeafe;
+  --brand-200: #bfdbfe;
+  --brand-400: #60a5fa;
+  --brand-600: #3b82f6;
+  --brand-800: #1d4ed8;
+  --brand-900: #1e3a5f;
+
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+
   --blue: #2563eb;
   --blue-soft: #3b82f6;
   --blue-bg: rgba(37,99,235,0.07);
@@ -27,22 +46,42 @@
   --fall-bg: rgba(34,197,94,0.08);
   --amber: #f59e0b;
   --amber-bg: rgba(245,158,11,0.08);
-  --green-spotify: #1db954;
-  --green-bg: rgba(29,185,84,0.08);
   --purple: #7c3aed;
   --purple-bg: rgba(124,58,237,0.08);
   --teal: #0d9488;
   --teal-bg: rgba(13,148,136,0.08);
+  --pink: #e85d75;
+  --pink-bg: rgba(232,93,117,0.08);
+
+  --teal-600: #0d9488;
+  --teal-500: #14b8a6;
+  --teal-100: #ccfbf1;
+  --teal-50: #f0fdfa;
+  --pink-600: #db2777;
+  --pink-500: #ec4899;
+  --pink-200: #fbcfe8;
+  --pink-50: #fdf2f8;
+  --blue-600: #2563eb;
+  --blue-500: #3b82f6;
+  --blue-200: #93c5fd;
+  --blue-50: #eff6ff;
+  --amber-600: #d97706;
+  --amber-500: #f59e0b;
+  --amber-200: #fde68a;
+  --amber-50: #fffbeb;
+
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-pill: 19px;
   --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
   --shadow-hover: 0 8px 30px rgba(0,0,0,0.08);
   --shadow-glow: 0 0 40px rgba(37,99,235,0.06);
   --ease: 200ms cubic-bezier(0.4,0,0.2,1);
   --ease-bounce: 300ms cubic-bezier(0.34,1.56,0.64,1);
-  --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
   --mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 }
 [data-theme="dark"] {
@@ -63,17 +102,44 @@
   --fall: #4ade80;
   --fall-bg: rgba(74,222,128,0.1);
   --amber-bg: rgba(245,158,11,0.1);
-  --green-bg: rgba(29,185,84,0.1);
   --purple-bg: rgba(167,139,250,0.1);
   --teal-bg: rgba(45,212,191,0.1);
+  --pink-bg: rgba(232,93,117,0.1);
+
+  --brand-50: #1e2240;
+  --brand-100: #1a2a50;
+  --brand-200: #1e3a6a;
+  --brand-400: #3b82f6;
+  --brand-600: #60a5fa;
+  --brand-800: #93c5fd;
+  --brand-900: #bfdbfe;
+
+  --gray-50: #161825;
+  --gray-100: #1c1e30;
+  --gray-200: #25273e;
+  --gray-300: #323456;
+  --gray-400: #4a4d73;
+  --gray-500: #646790;
+  --gray-600: #8285aa;
+  --gray-700: #a0a3c4;
+  --gray-800: #c0c3de;
+
+  --teal-50: #0f2a28;
+  --teal-100: #164a44;
+  --amber-50: #2a2210;
+  --blue-50: #0f1a3a;
+  --pink-50: #2a1020;
+
   --shadow-card: 0 1px 3px rgba(0,0,0,0.2), 0 4px 16px rgba(0,0,0,0.15);
   --shadow-hover: 0 8px 30px rgba(0,0,0,0.3);
   --shadow-glow: 0 0 60px rgba(96,165,250,0.06);
 }
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:14px;scroll-behavior:smooth}
 body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 
+/* ---- Background Orbs + Dots ---- */
 .bg-orbs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 .bg-orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.35;animation:orbFloat 20s ease-in-out infinite;will-change:transform}
 .bg-orb:nth-child(1){width:500px;height:500px;background:var(--blue);top:-10%;left:-5%;animation-delay:0s}
@@ -87,154 +153,135 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 ::-webkit-scrollbar-thumb{background:var(--text-muted);border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:var(--text-sec)}
 
-/* === Header === */
-.header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:56px;backdrop-filter:blur(20px) saturate(1.6);background:var(--bg-card);border-bottom:1px solid var(--border);will-change:transform}
-.header-left{display:flex;align-items:center;gap:12px}
-.header-logo{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--blue),#7c3aed);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(37,99,235,0.25)}
-.header-logo svg{width:18px;height:18px;color:#fff}
-.header-title{font-size:15px;font-weight:600;letter-spacing:-0.3px}
-.header-nav{display:flex;align-items:center;gap:6px;margin-left:32px}
-.header-nav a{padding:6px 12px;border-radius:var(--radius-sm);font-size:12px;font-weight:500;color:var(--text-sec);text-decoration:none;transition:all var(--ease)}
-.header-nav a:hover{color:var(--blue);background:var(--blue-bg)}
-.header-right{display:flex;align-items:center;gap:12px}
-.header-time{font-size:12px;color:var(--text-muted);font-family:var(--mono);background:var(--bg);padding:4px 10px;border-radius:var(--radius-sm);border:1px solid var(--border)}
-.theme-toggle{width:34px;height:34px;border-radius:var(--radius-sm);border:1px solid var(--border);background:transparent;color:var(--text-sec);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all var(--ease)}
+/* ---- Page Card ---- */
+.page-card{position:relative;z-index:1;max-width:960px;margin:32px auto;background:var(--bg-card);backdrop-filter:blur(20px) saturate(1.6);-webkit-backdrop-filter:blur(20px) saturate(1.6);border:1px solid var(--border);border-radius:var(--radius-2xl);overflow:hidden;box-shadow:var(--shadow-card);transition:all 0.3s}
+
+/* ---- Nav ---- */
+.nav{display:flex;justify-content:space-between;align-items:center;padding:24px 40px}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-brand-dot{width:4px;height:4px;border-radius:50%;background:var(--blue);box-shadow:0 0 6px rgba(37,99,235,0.3)}
+.nav-brand-text{font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:2.5px;text-transform:uppercase}
+.nav-menu{display:flex;align-items:center;gap:12px}
+.nav-menu a{font-size:13px;font-weight:500;color:var(--text-sec);text-decoration:none;padding:6px 12px;border-radius:var(--radius-sm);transition:all var(--ease)}
+.nav-menu a:hover{color:var(--blue);background:var(--blue-bg)}
+.nav-menu .sep{width:1px;height:10px;background:var(--border)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.theme-toggle{width:34px;height:34px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-card);color:var(--text-sec);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all var(--ease)}
 .theme-toggle:hover{border-color:var(--border-hover);color:var(--blue);background:var(--blue-bg);transform:scale(1.05)}
 
-/* === Hero === */
-.hero{position:relative;z-index:1;text-align:center;padding:64px 32px 40px;animation:fadeUp 0.6s var(--ease) both}
-.hero-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:999px;background:var(--blue-bg);color:var(--blue);font-size:12px;font-weight:500;margin-bottom:20px;border:1px solid rgba(37,99,235,0.12)}
-.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:pulse 2s ease-in-out infinite}
-.hero h1{font-size:38px;font-weight:800;letter-spacing:-0.5px;line-height:1.15;margin-bottom:12px}
-.hero h1 .gradient{background:linear-gradient(135deg,var(--blue),#7c3aed,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero p{font-size:15px;color:var(--text-sec);line-height:1.7;max-width:480px;margin:0 auto}
-.hero-stats{display:flex;gap:24px;justify-content:center;margin-top:28px;flex-wrap:wrap}
-.hero-stat{text-align:center}
-.hero-stat .num{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--text)}
-.hero-stat .label{font-size:12px;color:var(--text-muted);margin-top:2px}
+/* ---- Divider ---- */
+.divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:0 40px}
 
-/* === Main Container === */
-.main{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 32px 80px}
+/* ---- Hero ---- */
+.hero{padding:36px 40px 0}
+.hero-title{font-size:32px;font-weight:700;letter-spacing:-0.5px;line-height:1.2;color:var(--text)}
+.hero-title .accent{background:linear-gradient(135deg,var(--blue),#7c3aed,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-bar{width:28px;height:2px;border-radius:1px;background:linear-gradient(90deg,var(--blue),var(--blue-soft));margin-top:16px}
+.hero-subtitle{font-size:13px;color:var(--text-sec);letter-spacing:1.5px;margin-top:14px;line-height:1.8}
+.hero-cta{display:flex;gap:10px;margin-top:24px}
+.btn{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 28px;border-radius:999px;font-size:13px;font-weight:600;text-decoration:none;transition:all var(--ease);cursor:pointer;font-family:var(--font)}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 4px 14px rgba(37,99,235,0.25)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,99,235,0.35)}
+.btn-ghost{background:transparent;color:var(--text-sec);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--border-hover);color:var(--blue);background:var(--blue-bg)}
 
-/* === Section Header === */
-.section-header{display:flex;flex-direction:column;align-items:flex-start;margin-bottom:20px;animation:fadeUp 0.5s var(--ease) both}
-.section-header.centered{align-items:center;text-align:center}
-.section-tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--blue);margin-bottom:6px}
-.section-tag::before{content:'';width:16px;height:2px;background:var(--blue);border-radius:1px}
-.section-title{font-size:22px;font-weight:700;letter-spacing:-0.3px;color:var(--text)}
-.section-desc{font-size:13px;color:var(--text-muted);margin-top:4px}
+/* ---- Chart Card ---- */
+.chart-card{margin:24px 40px 0;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:24px;transition:all var(--ease);box-shadow:var(--shadow-glow)}
+.chart-card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-hover),var(--shadow-glow)}
+.chart-header{display:flex;justify-content:space-between;align-items:flex-start}
+.chart-label{font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase}
+.chart-price{font-family:var(--mono);font-size:30px;font-weight:700;letter-spacing:-0.5px;margin-top:4px;font-variant-numeric:tabular-nums}
+.chart-price .decimal{font-size:16px;font-weight:500;color:var(--text-muted)}
+.chart-badge{height:22px;padding:0 10px;border-radius:var(--radius-sm);font-family:var(--mono);font-size:12px;font-weight:600;display:flex;align-items:center;gap:3px}
+.chart-badge.up{background:var(--fall-bg);color:var(--fall)}
+.chart-badge.down{background:var(--rise-bg);color:var(--rise)}
+.chart-body{margin-top:16px}
+.chart-bars{display:flex;align-items:flex-end;gap:8px;height:70px}
+.chart-bars .bar{flex:1;border-radius:3px 3px 0 0;min-height:4px;transition:height 0.6s var(--ease)}
+.chart-line{margin-top:10px;height:44px}
+.chart-line svg{width:100%;height:100%}
+.chart-timeline{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.chart-time{font-size:11px;color:var(--text-muted);font-family:var(--mono)}
+.chart-status{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted)}
+.live-dot{width:6px;height:6px;border-radius:50%}
 
-/* === Section Spacing === */
-.section{padding:20px 0}
-.section+.section{border-top:1px solid var(--border);margin-top:8px}
+/* ---- Section Header ---- */
+.section-header{display:flex;justify-content:space-between;align-items:center;padding:28px 40px 16px}
+.section-title{font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase}
+.section-count{font-size:12px;color:var(--text-muted);font-family:var(--mono);font-weight:500}
 
-/* === Cards Grid === */
-.primary-card{display:block;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);cursor:pointer;text-decoration:none;color:inherit;overflow:hidden;transition:all var(--ease)}
-.primary-card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-hover),var(--shadow-glow);transform:translateY(-2px)}
-.primary-card:active{transform:translateY(0);transition-duration:100ms}
-.primary-card .card-inner{padding:28px 32px}
+/* ---- App Cards (4-col) ---- */
+.apps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 40px}
+.app-card{position:relative;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px 20px;overflow:hidden;cursor:pointer;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:all var(--ease)}
+.app-card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-hover),var(--shadow-glow);transform:translateY(-2px)}
+.app-card:active{transform:translateY(0);transition-duration:100ms}
+.app-card::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:2px}
+.app-card.teal::before{background:var(--teal)}
+.app-card.pink::before{background:var(--pink)}
+.app-card.blue::before{background:var(--blue)}
+.app-card.amber::before{background:var(--amber)}
+.app-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:16px;transition:transform var(--ease-bounce)}
+.app-card:hover .app-icon{transform:scale(1.08)}
+.app-icon svg{width:16px;height:16px}
+.app-card.teal .app-icon{background:var(--teal-bg);color:var(--teal)}
+.app-card.pink .app-icon{background:var(--pink-bg);color:var(--pink)}
+.app-card.blue .app-icon{background:var(--blue-bg);color:var(--blue)}
+.app-card.amber .app-icon{background:var(--amber-bg);color:var(--amber)}
+.app-name{font-size:14px;font-weight:600;letter-spacing:-0.2px}
+.app-desc{font-size:12px;color:var(--text-sec);margin-top:2px;line-height:1.4}
+.app-stats{display:flex;gap:8px;margin-top:12px}
+.app-stat{flex:1;background:var(--bg);border-radius:var(--radius-sm);padding:6px 8px;text-align:center;border:1px solid var(--border)}
+.app-stat .val{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.app-stat .lbl{font-size:10px;color:var(--text-muted);margin-top:1px}
+.app-card.teal .app-stat .val{color:var(--teal)}
+.app-card.amber .app-stat .val{color:var(--amber)}
+.app-tags{font-size:10px;color:var(--text-muted);letter-spacing:1.2px;margin-top:10px}
 
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid-full{display:grid;grid-template-columns:1fr;gap:16px}
+/* ---- Tech Stack ---- */
+.tech-section{padding:28px 40px 0}
+.tech-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.tech-tag{height:28px;padding:0 14px;border-radius:14px;background:var(--bg);border:1px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--text-sec);display:flex;align-items:center;transition:all var(--ease)}
+.tech-tag:hover{background:var(--blue-bg);border-color:rgba(37,99,235,0.12);color:var(--blue)}
+.tech-tag.highlight{background:var(--blue-bg);border-color:rgba(37,99,235,0.12);color:var(--blue)}
 
-.card{display:block;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);cursor:pointer;text-decoration:none;color:inherit;overflow:hidden;transition:all var(--ease)}
-.card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-hover),var(--shadow-glow);transform:translateY(-2px)}
-.card:active{transform:translateY(0);transition-duration:100ms}
-.card .card-inner{padding:24px}
+/* ---- Features ---- */
+.features{padding:24px 40px 0}
+.feature-item{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.feature-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.feature-text{font-size:13px;color:var(--text-sec);line-height:1.5}
 
-.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
-.card-icon-wrap{width:44px;height:44px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform var(--ease-bounce)}
-.card:hover .card-icon-wrap{transform:scale(1.08)}
-.card-icon-wrap svg{width:22px;height:22px}
-.card-icon-wrap.blue{background:var(--blue-bg);color:var(--blue)}
-.card-icon-wrap.amber{background:var(--amber-bg);color:var(--amber)}
-.card-icon-wrap.green{background:var(--green-bg);color:var(--green-spotify)}
-.card-icon-wrap.purple{background:var(--purple-bg);color:var(--purple)}
-.card-icon-wrap.teal{background:var(--teal-bg);color:var(--teal)}
+/* ---- Footer ---- */
+.footer{margin:28px 40px 32px;padding-top:18px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.footer-copy{font-size:11px;color:var(--text-muted);letter-spacing:1.2px}
+.footer-version{font-size:11px;color:var(--text-muted);font-family:var(--mono);font-weight:500}
 
-.card-info{flex:1;display:flex;flex-direction:column;gap:2px}
-.card-info h2{font-size:16px;font-weight:600;letter-spacing:-0.2px}
-.card-info .sub{font-size:12px;color:var(--text-muted);line-height:1.4}
-.card-arrow{width:32px;height:32px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;transition:all var(--ease);flex-shrink:0;color:var(--text-muted)}
-.card:hover .card-arrow,.primary-card:hover .card-arrow{background:var(--blue);border-color:var(--blue);color:#fff;transform:translateX(2px)}
-.card-arrow svg{width:14px;height:14px}
-
-/* --- Primary Card (full-width, hero-ish) specifics --- */
-.primary-card .card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px}
-.primary-card .card-header-left{display:flex;align-items:flex-start;gap:16px}
-
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.stat-box{background:var(--bg);border-radius:var(--radius-sm);padding:12px 16px;border:1px solid var(--border);transition:all var(--ease)}
-.stat-box:hover{border-color:var(--border-hover)}
-.stat-label{font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.3px}
-.stat-value{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-0.5px}
-.stat-change{font-size:12px;font-weight:600;margin-top:2px;display:flex;align-items:center;gap:4px}
-.stat-change.up{color:var(--rise)}
-.stat-change.down{color:var(--fall)}
-.stat-change .chg-badge{display:inline-flex;align-items:center;padding:1px 7px;border-radius:999px;font-size:11px;font-weight:600}
-.stat-change .chg-badge.up{background:var(--rise-bg);color:var(--rise)}
-.stat-change .chg-badge.down{background:var(--fall-bg);color:var(--fall)}
-.stat-change svg{width:12px;height:12px}
-
-.card-meta{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:14px;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted)}
-.card-meta .live-dot{width:6px;height:6px;border-radius:50%;background:var(--rise);display:inline-block;margin-right:5px;animation:pulse 2s ease-in-out infinite}
-
-/* --- Compact / secondary card stats --- */
-.stats-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-
-/* --- Feature tags (compact) --- */
-.feature-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
-.feature-tag{padding:4px 10px;border-radius:999px;font-size:11px;font-weight:500;background:var(--bg);border:1px solid var(--border);color:var(--text-sec)}
-.feature-tag.cat{background:var(--blue-bg);border-color:rgba(37,99,235,0.12);color:var(--blue)}
-
-/* === Divider === */
-.section-divider{display:flex;align-items:center;gap:16px;padding:8px 0 24px;animation:fadeUp 0.5s var(--ease) both}
-.section-divider-line{flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent)}
-.section-divider-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);white-space:nowrap}
-
-/* === Footer Stats Bar === */
-.footer-bar{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:24px 32px 48px}
-.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:24px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg)}
-.footer-item{text-align:center}
-.footer-item .num{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--blue)}
-.footer-item .label{font-size:11px;color:var(--text-muted);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px}
-.footer-text{text-align:center;padding:20px 0 40px;font-size:12px;color:var(--text-muted)}
-.footer-text a{color:var(--blue);text-decoration:none;font-weight:500;transition:opacity var(--ease)}
-.footer-text a:hover{opacity:0.8}
-
-/* === Animations === */
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-
-/* === Toast === */
+/* ---- Toast ---- */
 .toast-container{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
 .toast{padding:10px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;color:#fff;box-shadow:var(--shadow-hover);pointer-events:auto;animation:toastIn 0.3s var(--ease)}
 .toast.success{background:#059669}
 .toast.error{background:#dc2626}
 @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 
-/* === Responsive === */
-@media(max-width:768px){
-  .header{padding:0 16px;height:48px}
-  .header-nav{display:none}
-  .hero{padding:40px 16px 24px}
-  .hero h1{font-size:28px}
-  .hero-stats{gap:16px}
-  .main{padding:0 16px 60px}
-  .grid-2{grid-template-columns:1fr;gap:12px}
-  .stats-row{grid-template-columns:1fr 1fr}
-  .primary-card .card-inner{padding:20px}
-  .card .card-inner{padding:20px}
-  .footer-grid{grid-template-columns:1fr 1fr;padding:16px}
-  .section{padding:16px 0}
-  .bg-orb{filter:blur(60px)}
-  .bg-orb:nth-child(1){width:250px;height:250px}
-  .bg-orb:nth-child(2){width:200px;height:200px}
-  .bg-orb:nth-child(3){width:180px;height:180px}
+/* ---- Responsive ---- */
+@media(max-width:820px){
+  .page-card{margin:16px;border-radius:var(--radius-xl)}
+  .nav{padding:20px 24px}
+  .nav-menu{display:none}
+  .hero{padding:28px 24px 0}
+  .hero-title{font-size:26px}
+  .chart-card{margin:20px 24px 0;padding:20px}
+  .section-header{padding:24px 24px 12px}
+  .apps-grid{grid-template-columns:1fr 1fr;gap:10px;padding:0 24px}
+  .app-card{padding:20px 16px}
+  .divider{margin:0 24px}
+  .tech-section{padding:24px 24px 0}
+  .features{padding:20px 24px 0}
+  .footer{margin:24px}
 }
-@media(min-width:769px) and (max-width:1024px){
-  .main{padding:0 24px 80px}
-  .footer-bar{padding:24px 24px 48px}
+@media(max-width:480px){
+  .apps-grid{grid-template-columns:1fr}
+  .app-stats{flex-direction:column;gap:4px}
 }
 </style>
 </head>
@@ -246,306 +293,190 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 </div>
 <div class="bg-dots"></div>
 
-<div id="app">
-  <header class="header">
-    <div class="header-left">
-      <div class="header-logo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/><line x1="12" y1="22" x2="12" y2="15.5"/><polyline points="22 8.5 12 15.5 2 8.5"/></svg>
-      </div>
-      <span class="header-title">Hermes Study</span>
-      <nav class="header-nav">
-        <a href="/stock">股市</a>
-        <a href="/memo">备忘录</a>
-        <a href="/monitor">监控</a>
-        <a href="/tools">工具箱</a>
-        <a href="/music-player">音乐</a>
-      </nav>
+<div class="page-card">
+
+  <!-- ===== Nav ===== -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <span class="nav-brand-dot"></span>
+      <span class="nav-brand-text">HERMES · STUDY</span>
     </div>
-    <div class="header-right">
-      <span class="header-time" id="headerTime"></span>
+    <div class="nav-menu">
+      <a href="/stock">情报站</a>
+      <span class="sep"></span>
+      <a href="/memo">Memo</a>
+      <span class="sep"></span>
+      <a href="/music-player">音乐</a>
+      <span class="sep"></span>
+      <a href="/tools">工具箱</a>
+    </div>
+    <div class="nav-right">
       <button class="theme-toggle" id="themeToggle" title="切换暗色模式" aria-label="切换暗色模式">
         <svg id="iconSun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         <svg id="iconMoon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
     </div>
-  </header>
+  </nav>
 
-  <div class="hero">
-    <div class="hero-badge"><span class="dot"></span> 个人实验平台</div>
-    <h1>欢迎使用 <span class="gradient">Hermes Study</span></h1>
-    <p>集成行情追踪、效率工具与系统监控，构建个人开发工作台。</p>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="num">5</div>
-        <div class="label">功能模块</div>
+  <div class="divider"></div>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <h1 class="hero-title">把信息变成洞察<br><span class="accent">把工具变成习惯</span></h1>
+    <div class="hero-bar"></div>
+    <p class="hero-subtitle">股市情报 · 笔记记忆 · 音乐陪伴 · 效率工具<br>一站式个人知识工作台</p>
+    <div class="hero-cta">
+      <a href="#apps" class="btn btn-primary">开始探索 →</a>
+      <a href="#tech" class="btn btn-ghost">了解项目</a>
+    </div>
+  </section>
+
+  <!-- ===== Chart Card ===== -->
+  <div class="chart-card" id="stockCard">
+    <div class="chart-header">
+      <div>
+        <div class="chart-label">SHANGHAI COMPOSITE</div>
+        <div class="chart-price"><span id="ssecPrice">--</span><span class="decimal" id="ssecDecimal">.00</span></div>
       </div>
-      <div class="hero-stat">
-        <div class="num">17</div>
-        <div class="label">开发工具</div>
+      <span class="chart-badge" id="ssecBadge">--</span>
+    </div>
+    <div class="chart-body">
+      <div class="chart-bars" id="chartBars">
+        <div class="bar" style="height:40%;background:var(--brand-100)"></div>
+        <div class="bar" style="height:58%;background:var(--brand-200)"></div>
+        <div class="bar" style="height:48%;background:var(--brand-200)"></div>
+        <div class="bar" style="height:72%;background:var(--brand-400)"></div>
+        <div class="bar" style="height:84%;background:var(--brand-600)"></div>
+        <div class="bar" style="height:62%;background:var(--brand-400)"></div>
+        <div class="bar" style="height:76%;background:var(--brand-600)"></div>
+        <div class="bar" style="height:82%;background:var(--brand-800)"></div>
+        <div class="bar" style="height:60%;background:var(--brand-400);opacity:0.6"></div>
+        <div class="bar" style="height:70%;background:var(--brand-600)"></div>
       </div>
-      <div class="hero-stat">
-        <div class="num" id="heroStockStatus" style="color:var(--text-muted)">--</div>
-        <div class="label">行情状态</div>
+      <div class="chart-line">
+        <svg viewBox="0 0 220 40" preserveAspectRatio="none">
+          <polyline points="0,32 24,28 48,30 72,18 96,22 120,10 144,16 168,6 192,8 220,2"
+            fill="none" stroke="var(--brand-600)" stroke-width="1.2"
+            stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+          <circle cx="220" cy="2" r="3" fill="#FFFFFF" stroke="var(--brand-600)" stroke-width="1"/>
+          <circle cx="220" cy="2" r="1.5" fill="var(--brand-600)"/>
+        </svg>
       </div>
-      <div class="hero-stat">
-        <div class="num">Spring</div>
-        <div class="label">技术栈</div>
-      </div>
+    </div>
+    <div class="chart-timeline">
+      <span class="chart-time" id="chartTime">加载中...</span>
+      <span class="chart-status" id="chartStatus"><span class="live-dot" style="background:var(--fall);animation:pulse 2s ease-in-out infinite"></span> 实时</span>
     </div>
   </div>
 
-  <div class="main">
+  <div class="divider" style="margin-top:28px"></div>
 
-    <!-- ======== Section 1: 核心应用 ======== -->
-    <div class="section">
-      <div class="section-header">
-        <span class="section-tag">核心应用</span>
-        <h2 class="section-title">实时行情 · 数据驱动</h2>
-        <p class="section-desc">A 股指数实时跟踪，资金流向一览无余</p>
-      </div>
-
-      <a class="primary-card" href="/stock" id="stockCard">
-        <div class="card-inner">
-          <div class="card-header">
-            <div class="card-header-left">
-              <div class="card-icon-wrap blue" style="width:48px;height:48px">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
-              </div>
-              <div class="card-info">
-                <h2 style="font-size:18px">股市情报站</h2>
-                <span class="sub">A 股实时行情 · 板块轮动 · 资金流向 · 热门新闻</span>
-              </div>
-            </div>
-            <div class="card-arrow">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </div>
-          </div>
-          <div class="stats-row" id="stockPreview">
-            <div class="stat-box">
-              <div class="stat-label">上证指数</div>
-              <div class="stat-value" id="stock_ssec">--</div>
-              <div class="stat-change" id="stock_ssec_chg"></div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">深证成指</div>
-              <div class="stat-value" id="stock_szse">--</div>
-              <div class="stat-change" id="stock_szse_chg"></div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">状态</div>
-              <div class="stat-value" style="font-size:14px;font-weight:600;color:var(--fall)" id="stockStatus">--</div>
-              <div class="stat-change" style="color:var(--text-muted)">实时数据</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">延迟</div>
-              <div class="stat-value" style="font-size:14px;font-weight:600" id="stockLatency">--</div>
-              <div class="stat-change" style="color:var(--text-muted)">API 响应</div>
-            </div>
-          </div>
-          <div class="card-meta">
-            <span><span class="live-dot"></span><span id="stockMeta">加载中...</span></span>
-            <span>查看完整行情 →</span>
-          </div>
-        </div>
-      </a>
-    </div>
-
-    <!-- ======== Section 2: 效率工具 ======== -->
-    <div class="section" style="content-visibility:auto;contain-intrinsic-size:400px">
-      <div class="section-header">
-        <span class="section-tag">效率工具</span>
-        <h2 class="section-title">记录 · 创作 · 娱乐</h2>
-        <p class="section-desc">日常使用的轻量级应用</p>
-      </div>
-
-      <div class="grid-2">
-        <a class="card" href="/memo">
-          <div class="card-inner">
-            <div class="card-top">
-              <div style="display:flex;align-items:flex-start;gap:14px">
-                <div class="card-icon-wrap amber">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                </div>
-                <div class="card-info">
-                  <h2>Memo Board</h2>
-                  <span class="sub">个人备忘录 · 分类管理</span>
-                </div>
-              </div>
-              <div class="card-arrow">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </div>
-            </div>
-            <div class="stats-row-2">
-              <div class="stat-box">
-                <div class="stat-label">总计</div>
-                <div class="stat-value" style="font-size:20px;color:var(--amber)" id="memoCount">--</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-label">分类</div>
-                <div class="stat-value" style="font-size:20px;color:var(--amber)" id="memoCats">--</div>
-              </div>
-            </div>
-            <div class="card-meta" style="margin-top:12px;padding-top:12px">
-              <span id="memoMeta">加载中...</span>
-              <span>进入备忘录 →</span>
-            </div>
-          </div>
-        </a>
-
-        <a class="card" href="/music-player">
-          <div class="card-inner">
-            <div class="card-top">
-              <div style="display:flex;align-items:flex-start;gap:14px">
-                <div class="card-icon-wrap green">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-                </div>
-                <div class="card-info">
-                  <h2>Cyber Music</h2>
-                  <span class="sub">桌面音乐播放器</span>
-                </div>
-              </div>
-              <div class="card-arrow">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </div>
-            </div>
-            <div class="stats-row-2">
-              <div class="stat-box">
-                <div class="stat-label">版本</div>
-                <div class="stat-value" style="font-size:20px;color:var(--green-spotify)">v2.4</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-label">格式</div>
-                <div class="stat-value" style="font-size:20px;color:var(--green-spotify)">7 种</div>
-              </div>
-            </div>
-            <div class="feature-tags">
-              <span class="feature-tag">Spotify 风格</span>
-              <span class="feature-tag">粒子动画</span>
-              <span class="feature-tag">频谱可视化</span>
-            </div>
-          </div>
-        </a>
-      </div>
-    </div>
-
-    <!-- ======== Section 3: 平台管理 ======== -->
-    <div class="section" style="content-visibility:auto;contain-intrinsic-size:500px">
-      <div class="section-header">
-        <span class="section-tag">平台管理</span>
-        <h2 class="section-title">基础设施 · 开发者工具</h2>
-        <p class="section-desc">服务器监控与纯前端效率工具集</p>
-      </div>
-
-      <div class="grid-full" style="display:flex;flex-direction:column;gap:16px">
-        <a class="primary-card" href="/monitor" id="monitorCard">
-          <div class="card-inner">
-            <div class="card-header">
-              <div class="card-header-left">
-                <div class="card-icon-wrap teal" style="width:48px;height:48px">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                </div>
-                <div class="card-info">
-                  <h2 style="font-size:18px">服务器监控</h2>
-                  <span class="sub">ECS 实时指标 · CPU / 内存 / 磁盘 / 负载趋势</span>
-                </div>
-              </div>
-              <div class="card-arrow">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </div>
-            </div>
-            <div class="stats-row" id="monitorPreview">
-              <div class="stat-box">
-                <div class="stat-label">CPU</div>
-                <div class="stat-value" style="font-size:20px;color:var(--teal)" id="monCpu">--</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-label">内存</div>
-                <div class="stat-value" style="font-size:20px;color:var(--teal)" id="monMem">--</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-label">磁盘</div>
-                <div class="stat-value" style="font-size:20px;color:var(--teal)" id="monDsk">--</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-label">负载</div>
-                <div class="stat-value" style="font-size:20px;color:var(--teal)" id="monLoad">--</div>
-              </div>
-            </div>
-            <div class="card-meta">
-              <span id="monMeta">加载中...</span>
-              <span>实时监控 · Supabase →</span>
-            </div>
-          </div>
-        </a>
-
-        <a class="card" href="/tools">
-          <div class="card-inner">
-            <div class="card-top">
-              <div style="display:flex;align-items:flex-start;gap:14px">
-                <div class="card-icon-wrap purple" style="width:48px;height:48px">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-                </div>
-                <div class="card-info">
-                  <h2 style="font-size:18px">开发者工具箱</h2>
-                  <span class="sub">17 款纯前端效率工具，无需后端依赖</span>
-                </div>
-              </div>
-              <div class="card-arrow">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </div>
-            </div>
-            <div class="feature-tags" style="margin-top:2px">
-              <span class="feature-tag cat">数据处理</span>
-              <span class="feature-tag cat">编码转换</span>
-              <span class="feature-tag cat">格式工具</span>
-              <span class="feature-tag cat">文本处理</span>
-              <span class="feature-tag cat">网络调试</span>
-              <span class="feature-tag">JSON / YAML / XML</span>
-              <span class="feature-tag">SQL 格式化</span>
-              <span class="feature-tag">正则测试</span>
-              <span class="feature-tag">Cron 生成</span>
-              <span class="feature-tag">Base64 / Hash</span>
-              <span class="feature-tag">Diff 对比</span>
-              <span class="feature-tag">HTTP 调试</span>
-              <span class="feature-tag">时间戳转换</span>
-              <span class="feature-tag">UUID / 密码</span>
-              <span class="feature-tag">打字测试</span>
-            </div>
-            <div class="card-meta" style="margin-top:12px">
-              <span>5 大分类 · 纯前端 SPA</span>
-              <span>打开工具箱 →</span>
-            </div>
-          </div>
-        </a>
-      </div>
-    </div>
-
+  <!-- ===== Core Apps ===== -->
+  <div class="section-header" id="apps">
+    <span class="section-title">CORE APPLICATIONS</span>
+    <span class="section-count">04</span>
   </div>
 
-  <!-- === Footer Stats === -->
-  <div class="footer-bar">
-    <div class="footer-grid">
-      <div class="footer-item">
-        <div class="num">5</div>
-        <div class="label">在线模块</div>
+  <div class="apps-grid">
+    <!-- Memo -->
+    <a class="app-card teal" href="/memo">
+      <div class="app-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
       </div>
-      <div class="footer-item">
-        <div class="num">17</div>
-        <div class="label">开发工具</div>
+      <div class="app-name">Memo</div>
+      <div class="app-desc">碎片笔记 · 知识沉淀</div>
+      <div class="app-stats">
+        <div class="app-stat"><div class="val" id="memoCount">--</div><div class="lbl">条数</div></div>
+        <div class="app-stat"><div class="val" id="memoCats">--</div><div class="lbl">分类</div></div>
       </div>
-      <div class="footer-item">
-        <div class="num" id="footerStockStatus">--</div>
-        <div class="label">行情接口</div>
+      <div class="app-tags">轻量 · 即时 · 持久</div>
+    </a>
+
+    <!-- Music -->
+    <a class="app-card pink" href="/music-player">
+      <div class="app-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
       </div>
-      <div class="footer-item">
-        <div class="num" id="footerServerStatus">--</div>
-        <div class="label">服务器状态</div>
+      <div class="app-name">Music Player</div>
+      <div class="app-desc">播放管理 · 心情电台</div>
+      <div class="app-stats">
+        <div class="app-stat"><div class="val">v2.4</div><div class="lbl">版本</div></div>
+        <div class="app-stat"><div class="val">7</div><div class="lbl">格式</div></div>
       </div>
-    </div>
-    <div class="footer-text">
-      Hermes Study · <a href="https://github.com/dsqblack/hermes-study" target="_blank">GitHub</a>
+      <div class="app-tags">沉浸 · 个性 · 流畅</div>
+    </a>
+
+    <!-- 工具箱 -->
+    <a class="app-card blue" href="/tools">
+      <div class="app-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      </div>
+      <div class="app-name">工具箱</div>
+      <div class="app-desc">17 个工具 · 5 大分类</div>
+      <div class="app-stats">
+        <div class="app-stat"><div class="val">17</div><div class="lbl">工具</div></div>
+        <div class="app-stat"><div class="val">5</div><div class="lbl">分类</div></div>
+      </div>
+      <div class="app-tags">实用 · 纯前端 · SPA</div>
+    </a>
+
+    <!-- 情报站 -->
+    <a class="app-card amber" href="/stock" id="marketCard">
+      <div class="app-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v4h-4"/></svg>
+      </div>
+      <div class="app-name">情报站</div>
+      <div class="app-desc">行情追踪 · 涨跌提醒</div>
+      <div class="app-stats">
+        <div class="app-stat"><div class="val" id="ssecMini">--</div><div class="lbl">上证</div></div>
+        <div class="app-stat"><div class="val" id="marketStatus">--</div><div class="lbl">状态</div></div>
+      </div>
+      <div class="app-tags">实时 · 深度 · 智能</div>
+    </a>
+  </div>
+
+  <div class="divider" style="margin-top:28px"></div>
+
+  <!-- ===== Tech Stack ===== -->
+  <div class="tech-section" id="tech">
+    <div class="section-title">TECH STACK</div>
+    <div class="tech-tags">
+      <span class="tech-tag">Spring Boot</span>
+      <span class="tech-tag">MyBatis</span>
+      <span class="tech-tag">MySQL 8</span>
+      <span class="tech-tag">HTML5</span>
+      <span class="tech-tag">CSS3</span>
+      <span class="tech-tag">JS</span>
+      <span class="tech-tag highlight">Design Token</span>
     </div>
   </div>
+
+  <!-- ===== Features ===== -->
+  <div class="features">
+    <div class="feature-item">
+      <span class="feature-dot" style="background:var(--brand-600)"></span>
+      <span class="feature-text">Design Token 驱动 · 统一视觉语言 · 迭代式构建</span>
+    </div>
+    <div class="feature-item">
+      <span class="feature-dot" style="background:var(--teal)"></span>
+      <span class="feature-text">Spring Boot 3.2 + MyBatis 后端架构</span>
+    </div>
+    <div class="feature-item">
+      <span class="feature-dot" style="background:var(--blue)"></span>
+      <span class="feature-text">纯前端 SPA · 零依赖 · 即开即用</span>
+    </div>
+    <div class="feature-item">
+      <span class="feature-dot" style="background:var(--amber)"></span>
+      <span class="feature-text">MySQL 8.0 数据持久化</span>
+    </div>
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <span class="footer-copy">&copy; 2026 hermes-study</span>
+    <span class="footer-version">v0.1 · concept</span>
+  </footer>
+
 </div>
 
 <div class="toast-container" id="toastContainer"></div>
@@ -556,118 +487,54 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
   var theme = localStorage.getItem('hermes-theme') || 'light';
   function applyTheme(t) {
-    if (t === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      document.getElementById('iconSun').style.display = 'none';
-      document.getElementById('iconMoon').style.display = 'block';
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-      document.getElementById('iconSun').style.display = 'block';
-      document.getElementById('iconMoon').style.display = 'none';
-    }
+    document.documentElement.setAttribute('data-theme', t);
+    document.getElementById('iconSun').style.display = t === 'dark' ? 'none' : 'block';
+    document.getElementById('iconMoon').style.display = t === 'dark' ? 'block' : 'none';
   }
   applyTheme(theme);
   document.getElementById('themeToggle').addEventListener('click', function() {
-    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    theme = isDark ? 'light' : 'dark';
+    theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     localStorage.setItem('hermes-theme', theme);
     applyTheme(theme);
   });
 
-  function updateClock() {
-    var now = new Date();
-    document.getElementById('headerTime').textContent =
-      String(now.getHours()).padStart(2,'0') + ':' +
-      String(now.getMinutes()).padStart(2,'0') + ':' +
-      String(now.getSeconds()).padStart(2,'0');
+  function loadStock() {
+    fetch('/api/stock/hot')
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.code !== 0 || !d.indices || !d.indices.length) return;
+        var idx = d.indices[0];
+        var up = idx.changePct >= 0;
+        var intPart = Math.floor(idx.price);
+        document.getElementById('ssecPrice').textContent = intPart.toLocaleString();
+        document.getElementById('ssecDecimal').textContent = (idx.price - intPart).toFixed(2).substring(1);
+        var badge = document.getElementById('ssecBadge');
+        badge.className = 'chart-badge ' + (up ? 'up' : 'down');
+        badge.innerHTML = (up ? '+' : '') + idx.changePct.toFixed(2) + '%';
+        document.getElementById('chartTime').textContent = '更新于 ' + new Date().toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'}) + ' · 实时';
+        document.getElementById('ssecMini').textContent = idx.price.toFixed(2);
+        document.getElementById('marketStatus').textContent = '在线';
+      })
+      .catch(function() {
+        document.getElementById('chartStatus').innerHTML = '暂无数据';
+        document.getElementById('marketStatus').textContent = '离线';
+      });
   }
-  updateClock();
-  setInterval(updateClock, 1000);
+  loadStock();
 
-  var arrowUp = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>';
-  var arrowDown = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>';
-
-  function loadStockSummary() {
-    var t0 = Date.now();
-    fetch('/api/stock/hot').then(function(r) { return r.json(); }).then(function(d) {
-      var elapsed = Math.round((Date.now() - t0) / 1000);
-      document.getElementById('stockLatency').textContent = elapsed + 's';
-      if (d.code === 0 && d.indices && d.indices.length) {
-        document.getElementById('stockStatus').textContent = '正常';
-        document.getElementById('stockStatus').style.color = 'var(--fall)';
-        // update hero & footer status
-        var heroEl = document.getElementById('heroStockStatus');
-        if (heroEl) { heroEl.textContent = '在线'; heroEl.style.color = 'var(--fall)'; }
-        var footerEl = document.getElementById('footerStockStatus');
-        if (footerEl) { footerEl.textContent = '在线'; footerEl.style.color = 'var(--fall)'; }
-        d.indices.slice(0, 2).forEach(function(idx) {
-          var isSSE = idx.name.indexOf('上证') !== -1;
-          var el = document.getElementById(isSSE ? 'stock_ssec' : 'stock_szse');
-          var chgEl = document.getElementById(isSSE ? 'stock_ssec_chg' : 'stock_szse_chg');
-          if (el) el.textContent = (idx.price || 0).toFixed(2);
-          if (chgEl) {
-            var up = idx.changePct >= 0;
-            chgEl.className = 'stat-change ' + (up ? 'up' : 'down');
-            chgEl.innerHTML = '<span class="chg-badge ' + (up ? 'up' : 'down') + '">' +
-              (up ? arrowUp : arrowDown) + ' ' + (up ? '+' : '') + idx.changePct.toFixed(2) + '%</span>';
-          }
-        });
-        document.getElementById('stockMeta').textContent = '更新于 ' + new Date().toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
-      }
-    }).catch(function() {
-      document.getElementById('stockStatus').textContent = '离线';
-      document.getElementById('stockStatus').style.color = 'var(--text-muted)';
-      var heroEl = document.getElementById('heroStockStatus');
-      if (heroEl) { heroEl.textContent = '离线'; heroEl.style.color = 'var(--text-muted)'; }
-      var footerEl = document.getElementById('footerStockStatus');
-      if (footerEl) { footerEl.textContent = '离线'; footerEl.style.color = 'var(--text-muted)'; }
-    });
-  }
-  loadStockSummary();
-
-  function loadMemoSummary() {
-    fetch('/api/memo/memos').then(function(r) { return r.json(); }).then(function(memos) {
-      if (Array.isArray(memos)) {
-        var categories = {};
-        memos.forEach(function(m) {
-          if (m.categoryName) categories[m.categoryName] = (categories[m.categoryName] || 0) + 1;
-        });
-        var catCount = Object.keys(categories).length;
-        var recent = memos.length ? new Date(memos[0].updateTime || memos[0].createTime) : null;
-        var recentStr = recent ? (new Date().toDateString() === recent.toDateString() ? '今天更新' : recent.toLocaleDateString('zh-CN')) : '';
+  function loadMemo() {
+    fetch('/api/memo/memos')
+      .then(function(r) { return r.json(); })
+      .then(function(memos) {
+        if (!Array.isArray(memos)) return;
+        var cats = {};
+        memos.forEach(function(m) { if (m.categoryName) cats[m.categoryName] = 1; });
         document.getElementById('memoCount').textContent = memos.length;
-        document.getElementById('memoCats').textContent = catCount;
-        document.getElementById('memoMeta').innerHTML = (recentStr ? recentStr : memos.length + ' 条记录');
-      }
-    }).catch(function() {
-      document.getElementById('memoCount').textContent = '--';
-      document.getElementById('memoCats').textContent = '--';
-      document.getElementById('memoMeta').textContent = '暂无数据';
-    });
+        document.getElementById('memoCats').textContent = Object.keys(cats).length;
+      })
+      .catch(function() {});
   }
-  loadMemoSummary();
-
-  function loadMonitorSummary() {
-    fetch('/api/monitor/current').then(function(r) { return r.json(); }).then(function(d) {
-      if (d.code === 0 && d.data) {
-        var m = d.data;
-        document.getElementById('monCpu').textContent = (m.cpu_usage || 0).toFixed(1) + '%';
-        document.getElementById('monMem').textContent = (m.memory_usage || 0).toFixed(1) + '%';
-        document.getElementById('monDsk').textContent = (m.disk_usage || 0).toFixed(0) + '%';
-        document.getElementById('monLoad').textContent = (m.load_average || 0).toFixed(2);
-        document.getElementById('monMeta').textContent = '更新于 ' + new Date(m.created_at).toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'});
-        var footerEl = document.getElementById('footerServerStatus');
-        if (footerEl) { footerEl.textContent = '正常'; footerEl.style.color = 'var(--fall)'; }
-      }
-    }).catch(function() {
-      document.getElementById('monCpu').textContent = '--';
-      document.getElementById('monMem').textContent = '--';
-      document.getElementById('monDsk').textContent = '--';
-      document.getElementById('monLoad').textContent = '--';
-    });
-  }
-  loadMonitorSummary();
-  setInterval(loadMonitorSummary, 30000);
+  loadMemo();
 })();
 </script>
 </body>
