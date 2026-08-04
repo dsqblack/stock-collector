@@ -3,623 +3,518 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spotify Music Player — 桌面音乐播放器</title>
+<title>BOOMBOX · 孟菲斯音乐播放器</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <style>
-  /* ===== Design Tokens ===== */
+  /* ============================================================
+     BOOMBOX — 孟菲斯亮色几何风
+     奶油白 + 亮黄/粉/蓝/绿 + 粗黑描边 + 圆点波浪几何
+     ============================================================ */
   :root {
-    --bg:        #0d0f14;
-    --bg-card:   #13161e;
-    --bg-glass:  rgba(255,255,255,0.04);
-    --border:    rgba(255,255,255,0.08);
-    --border-md: rgba(255,255,255,0.14);
-    --green:     #1db954;
-    --green-dim: rgba(29,185,84,0.12);
-    --green-glow:rgba(29,185,84,0.25);
-    --text:      #e8eaf0;
-    --text-2:    #9ca3af;
-    --text-3:    #6b7280;
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 14px;
-    --radius-xl: 20px;
-    --font: 'Inter', 'PingFang SC', system-ui, sans-serif;
-    --mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --cream:     #fdf6e9;   /* 奶油白 */
+    --cream-2:   #f7ecd8;
+    --card:      #ffffff;
+    --ink:       #1a1a1a;   /* 粗黑 */
+    --yellow:    #ffd500;
+    --pink:      #ff4f9a;
+    --blue:      #2b7fff;
+    --green:     #00c853;
+    --orange:    #ff7a1a;
+    --text-2:    #6b5d4f;
+    --text-3:    #a5947f;
+    --border:    #e5d8c2;
+    --radius: 0;
+    --font-display: 'Archivo Black', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    --font-bold:    'Archivo', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    --font-body:    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', -apple-system, sans-serif;
+    --font-mono:    'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { scroll-behavior: smooth; }
-
   body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font);
+    background:
+      radial-gradient(circle at 8% 12%, rgba(255,79,154,0.08) 0, transparent 30%),
+      radial-gradient(circle at 92% 8%, rgba(43,127,255,0.08) 0, transparent 30%),
+      var(--cream);
+    color: var(--ink);
+    font-family: var(--font-body);
     font-size: 15px;
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
   }
+  ::selection { background: var(--yellow); color: var(--ink); }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--ink); }
 
-  a { color: var(--green); text-decoration: none; }
+  a { color: var(--ink); text-decoration: none; }
   a:hover { opacity: 0.8; }
+
+  /* ===== 几何装饰 ===== */
+  .deco-dots {
+    background-image: radial-gradient(var(--ink) 2px, transparent 2px);
+    background-size: 14px 14px;
+  }
+  .deco-stripes {
+    background-image: repeating-linear-gradient(45deg, var(--ink) 0 6px, transparent 6px 14px);
+  }
+  .deco-zigzag {
+    background-image:
+      linear-gradient(135deg, var(--ink) 4px, transparent 4px),
+      linear-gradient(45deg, var(--ink) 4px, transparent 4px);
+    background-size: 12px 12px;
+  }
 
   /* ===== NAV ===== */
   .nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 40px;
-    height: 60px;
-    background: rgba(13,15,20,0.88);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 28px; height: 58px;
+    background: var(--yellow);
+    border-bottom: 3px solid var(--ink);
   }
   .nav-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 600;
-    font-size: 15px;
-    letter-spacing: 0.04em;
-    color: var(--text);
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--font-display);
+    font-size: 16px; letter-spacing: 0.02em;
+    color: var(--ink);
   }
-  .nav-logo .eq-icon {
-    display: flex; align-items: flex-end; gap: 2px; height: 18px;
+  .nav-logo .box {
+    width: 26px; height: 26px;
+    background: var(--pink);
+    border: 3px solid var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: #fff;
   }
-  .nav-logo .eq-icon span {
-    width: 3px;
-    background: var(--green);
-    border-radius: 2px;
-    animation: eq 1.2s ease-in-out infinite alternate;
+  .nav-links { display: flex; gap: 6px; list-style: none; }
+  .nav-links a {
+    color: var(--ink); font-size: 13px; font-weight: 700;
+    padding: 6px 14px; border: 2px solid var(--ink);
+    background: var(--cream);
+    transition: all .15s;
   }
-  .nav-logo .eq-icon span:nth-child(1){ height: 8px; animation-delay: 0s; }
-  .nav-logo .eq-icon span:nth-child(2){ height: 14px;animation-delay:.15s; }
-  .nav-logo .eq-icon span:nth-child(3){ height: 10px;animation-delay:.3s; }
-  .nav-logo .eq-icon span:nth-child(4){ height: 16px;animation-delay:.45s; }
-  .nav-logo .eq-icon span:nth-child(5){ height: 6px; animation-delay:.6s; }
-  @keyframes eq {
-    from { transform: scaleY(0.4); }
-    to   { transform: scaleY(1); }
-  }
-  .nav-links {
-    display: flex; gap: 28px; list-style: none;
-  }
-  .nav-links a { color: var(--text-2); font-size: 14px; transition: color .2s; }
-  .nav-links a:hover { color: var(--text); }
+  .nav-links a:hover { background: var(--pink); color: #fff; opacity: 1; }
   .nav-cta {
-    padding: 7px 18px;
-    background: var(--green);
-    color: #000;
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    font-size: 13px;
-    transition: opacity .2s, transform .1s;
+    padding: 8px 18px;
+    background: var(--blue); color: #fff;
+    border: 3px solid var(--ink);
+    font-weight: 900; font-size: 13px;
+    box-shadow: 4px 4px 0 var(--ink);
+    transition: all .15s;
   }
-  .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+  .nav-cta:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); opacity: 1; color: #fff; }
 
   /* ===== SECTIONS ===== */
   section { padding: 80px 40px; max-width: 1100px; margin: 0 auto; }
   .section-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--green);
-    margin-bottom: 12px;
+    background: var(--ink); color: var(--cream);
+    padding: 4px 14px; margin-bottom: 16px;
   }
   h2.section-title {
-    font-size: 32px;
-    font-weight: 700;
-    line-height: 1.25;
-    color: var(--text);
-    margin-bottom: 16px;
+    font-family: var(--font-display);
+    font-size: 32px; font-weight: 900; line-height: 1.2;
+    color: var(--ink); margin-bottom: 16px;
   }
-  p.section-sub {
-    font-size: 15px;
-    color: var(--text-2);
-    max-width: 520px;
-    line-height: 1.7;
-  }
+  p.section-sub { font-size: 15px; color: var(--text-2); max-width: 540px; line-height: 1.75; }
 
-  /* ===== HERO ===== */
+  /* ===== HERO：不对称几何 ===== */
   .hero {
     max-width: 100%;
-    padding: 100px 40px 80px;
-    background: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(29,185,84,0.08) 0%, transparent 60%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 28px;
+    padding: 70px 40px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: ""; position: absolute; right: -60px; top: -60px;
+    width: 240px; height: 240px; border-radius: 50%;
+    background: var(--yellow); border: 3px solid var(--ink);
+    z-index: 0;
+  }
+  .hero::after {
+    content: ""; position: absolute; right: 130px; top: 30px;
+    width: 44px; height: 44px;
+    background: var(--pink); border: 3px solid var(--ink);
+    transform: rotate(45deg); z-index: 0;
+  }
+  .hero-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1.1fr 0.9fr;
+    gap: 48px; align-items: center;
+    position: relative; z-index: 1;
   }
   .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 14px;
-    border: 1px solid rgba(29,185,84,0.35);
-    border-radius: 99px;
-    background: var(--green-dim);
-    font-size: 12px;
-    color: var(--green);
-    font-weight: 500;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 16px;
+    background: var(--green); color: #fff;
+    border: 3px solid var(--ink);
+    font-family: var(--font-mono);
+    font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transform: rotate(-2deg);
+    box-shadow: 3px 3px 0 var(--ink);
   }
   .hero h1 {
-    font-size: clamp(36px, 6vw, 62px);
-    font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    color: var(--text);
+    font-family: var(--font-display);
+    font-size: clamp(40px, 6vw, 64px);
+    font-weight: 900; line-height: 1.05;
+    letter-spacing: -0.01em; color: var(--ink);
+    margin-top: 22px;
   }
-  .hero h1 em {
-    font-style: normal;
-    color: var(--green);
-  }
+  .hero h1 .hl-pink { background: var(--pink); color: #fff; padding: 0 6px; display: inline-block; transform: rotate(-1deg); border: 3px solid var(--ink); }
+  .hero h1 .hl-blue { background: var(--blue); color: #fff; padding: 0 6px; display: inline-block; transform: rotate(1deg); border: 3px solid var(--ink); }
   .hero p {
-    font-size: 17px;
-    color: var(--text-2);
-    max-width: 560px;
-    line-height: 1.75;
+    font-size: 16px; color: var(--text-2);
+    max-width: 480px; line-height: 1.8; margin-top: 18px;
   }
-  .hero-btns {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 26px; }
   .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 13px 28px;
-    background: var(--green);
-    color: #000;
-    border-radius: var(--radius-md);
-    font-weight: 700;
-    font-size: 14px;
-    transition: opacity .2s, transform .15s;
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 30px;
+    background: var(--pink); color: #fff;
+    border: 3px solid var(--ink);
+    font-weight: 900; font-size: 14px;
+    box-shadow: 5px 5px 0 var(--ink);
+    transition: all .15s;
   }
-  .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); color: #000; }
+  .btn-primary:hover { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--ink); color: #fff; opacity: 1; }
   .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 13px 28px;
-    background: var(--bg-glass);
-    color: var(--text);
-    border: 1px solid var(--border-md);
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    font-size: 14px;
-    transition: background .2s, transform .15s;
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 30px;
+    background: var(--cream); color: var(--ink);
+    border: 3px solid var(--ink);
+    font-weight: 900; font-size: 14px;
+    box-shadow: 5px 5px 0 var(--ink);
+    transition: all .15s;
   }
-  .btn-secondary:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); color: var(--text); }
+  .btn-secondary:hover { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--ink); }
 
-  /* ===== APP PREVIEW ===== */
-  .preview-wrap {
-    margin-top: 20px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-  }
-  .preview-glow {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 500px;
-    height: 260px;
-    background: radial-gradient(ellipse, rgba(29,185,84,0.18) 0%, transparent 70%);
-    pointer-events: none;
-    filter: blur(30px);
-  }
+  /* ===== 唱机预览：色块 BOOMBOX ===== */
+  .preview-wrap { position: relative; }
   .preview-frame {
+    background: var(--card);
+    border: 4px solid var(--ink);
+    box-shadow: 10px 10px 0 var(--ink);
+    padding: 16px;
     position: relative;
-    width: 100%;
-    max-width: 820px;
-    border-radius: var(--radius-xl);
-    border: 1px solid var(--border-md);
-    overflow: hidden;
-    background: #1a1f2b;
   }
-  .preview-bar {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 12px 16px 10px;
-    background: rgba(0,0,0,0.35);
-    border-bottom: 1px solid var(--border);
+  .preview-frame::before {
+    content: "★ BOOMBOX 45 ★";
+    display: block;
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.24em;
+    color: var(--ink); text-align: center;
+    padding-bottom: 10px; border-bottom: 3px solid var(--ink);
+    margin-bottom: 14px; font-weight: 700;
   }
-  .preview-bar .dot {
-    width: 11px; height: 11px; border-radius: 50%;
-  }
-  .preview-bar .dot-red   { background: #ff5f57; }
-  .preview-bar .dot-amber { background: #febc2e; }
-  .preview-bar .dot-green { background: #28c840; }
-  .preview-bar .title {
-    flex: 1; text-align: center;
-    font-size: 12px;
-    font-family: var(--mono);
-    color: var(--text-3);
-    letter-spacing: 0.06em;
-  }
-  /* ---- 模拟播放器 UI ---- */
-  .mock-player {
-    display: grid;
-    grid-template-columns: 260px 1fr;
-    min-height: 340px;
-    font-family: var(--mono);
-    font-size: 11px;
-  }
+  .mock-player { display: grid; grid-template-columns: 1fr 1.2fr; gap: 14px; }
+
+  /* 左：唱片 */
   .mock-left {
-    background: #111318;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    border-right: 1px solid var(--border);
+    background: var(--yellow);
+    border: 3px solid var(--ink);
+    padding: 18px;
+    display: flex; flex-direction: column; gap: 12px;
+    position: relative;
+  }
+  .mock-left::after {
+    content: ""; position: absolute; right: 10px; bottom: 10px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--blue); border: 2px solid var(--ink);
   }
   .mock-album {
-    width: 100%;
-    aspect-ratio: 1;
-    border-radius: var(--radius-md);
-    background: #1a1d27;
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: relative;
+    width: 100%; aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
     overflow: hidden;
-    position: relative;
   }
-  .mock-album canvas { position: absolute; inset: 0; }
-  .mock-album-text {
-    position: relative;
-    text-align: center;
-    z-index: 1;
+  .disc {
+    position: absolute; inset: 4%;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 50% 50%, var(--pink) 0 16%, transparent 16.5%),
+      repeating-radial-gradient(circle, var(--ink) 0 3px, #fff 3px 7px);
+    border: 4px solid var(--ink);
+    animation: spin 6s linear infinite;
   }
-  .mock-album-text .song { color: var(--text); font-size: 12px; font-weight: 600; margin-bottom: 4px; font-family: var(--font); }
-  .mock-album-text .artist { color: var(--text-2); font-size: 11px; font-family: var(--font); }
+  .disc::before {
+    content: ""; position: absolute; inset: 34%;
+    border-radius: 50%;
+    background: var(--yellow); border: 3px solid var(--ink);
+  }
+  .disc::after {
+    content: "♫"; position: absolute; inset: 38%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 900; color: var(--ink);
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .mock-album canvas { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; }
   .progress-bar {
-    width: 100%;
-    height: 3px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 2px;
+    width: 100%; height: 8px;
+    background: #fff; border: 2px solid var(--ink);
     position: relative;
   }
   .progress-fill {
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 38%;
-    background: var(--green);
-    border-radius: 2px;
+    position: absolute; left: 0; top: 0; bottom: 0; width: 38%;
+    background: var(--pink);
   }
   .mock-controls {
-    display: flex; align-items: center; justify-content: center; gap: 12px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: var(--font-mono);
   }
   .ctrl-btn {
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.07);
+    width: 32px; height: 32px;
+    border: 2px solid var(--ink);
+    background: #fff;
     display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    font-size: 11px;
-    color: var(--text-2);
+    cursor: pointer; font-size: 12px; color: var(--ink);
+    transition: all .12s;
   }
+  .ctrl-btn:hover { background: var(--blue); color: #fff; }
   .ctrl-btn.play {
-    width: 38px; height: 38px;
-    background: var(--green);
-    color: #000;
-    font-size: 14px;
+    width: 44px; height: 44px;
+    background: var(--pink); color: #fff;
+    font-size: 16px; border-width: 3px;
   }
-  .vol-row { display: flex; align-items: center; gap: 8px; font-size: 10px; color: var(--text-3); }
-  .vol-track { flex: 1; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; position: relative; }
-  .vol-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 55%; background: var(--text-3); border-radius: 2px; }
-  .mock-right {
-    background: #0f1218;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-  .mock-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 14px;
-  }
-  .mock-tab {
-    padding: 4px 10px;
-    border-radius: var(--radius-sm);
-    font-size: 10px;
-    color: var(--text-3);
-    cursor: pointer;
-  }
-  .mock-tab.active {
-    background: var(--green-dim);
-    color: var(--green);
-  }
-  .mock-track {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 6px;
-    border-radius: var(--radius-sm);
-    transition: background .15s;
-  }
-  .mock-track:hover { background: rgba(255,255,255,0.04); }
-  .mock-track.playing { background: var(--green-dim); }
-  .mock-track-num { width: 20px; text-align: right; color: var(--text-3); font-size: 10px; }
-  .mock-track.playing .mock-track-num { color: var(--green); }
-  .mock-track-info { flex: 1; }
-  .mock-track-name { color: var(--text); font-size: 11px; font-family: var(--font); }
-  .mock-track.playing .mock-track-name { color: var(--green); }
-  .mock-track-artist { color: var(--text-3); font-size: 10px; font-family: var(--font); }
-  .mock-track-tag {
-    font-size: 9px;
-    padding: 2px 6px;
-    border-radius: 3px;
-    background: var(--green-dim);
-    color: var(--green);
-  }
-  .mock-track-actions { display: flex; gap: 6px; }
-  .mock-track-actions span { color: var(--text-3); font-size: 12px; cursor: pointer; }
-  .mock-track-actions span:hover { color: var(--green); }
+  .ctrl-btn.play:hover { background: var(--blue); }
+  .vol-row { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; color: var(--ink); font-weight: 700; }
+  .vol-track { flex: 1; height: 6px; background: #fff; border: 2px solid var(--ink); position: relative; }
+  .vol-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 55%; background: var(--green); }
 
-  /* ===== STATS ===== */
+  /* 右：曲目表 */
+  .mock-right {
+    background: var(--cream-2);
+    border: 3px solid var(--ink);
+    padding: 12px;
+    display: flex; flex-direction: column;
+  }
+  .mock-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+  .mock-tab {
+    padding: 5px 12px; font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.08em; color: var(--ink); cursor: pointer; font-weight: 700;
+    border: 2px solid var(--ink); background: #fff;
+  }
+  .mock-tab.active { background: var(--blue); color: #fff; }
+  .mock-track {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 8px; border-bottom: 2px dashed var(--border);
+    transition: background .12s;
+  }
+  .mock-track:last-child { border-bottom: none; }
+  .mock-track:hover { background: #fff; }
+  .mock-track.playing { background: var(--yellow); }
+  .mock-track-num { width: 22px; text-align: right; color: var(--text-3); font-family: var(--font-mono); font-size: 10px; font-weight: 700; }
+  .mock-track.playing .mock-track-num { color: var(--ink); }
+  .mock-track-info { flex: 1; min-width: 0; }
+  .mock-track-name {
+    color: var(--ink); font-size: 12.5px; font-weight: 800;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .mock-track-artist { color: var(--text-2); font-size: 10.5px; }
+  .mock-track-tag {
+    font-size: 9px; padding: 2px 7px; margin-left: 6px;
+    background: var(--pink); color: #fff;
+    font-family: var(--font-mono); letter-spacing: 0.06em; font-weight: 700;
+  }
+  .mock-track-actions { display: flex; gap: 8px; color: var(--text-3); font-size: 13px; }
+  .mock-track-actions span { cursor: pointer; }
+  .mock-track-actions span:hover { color: var(--pink); }
+
+  /* ===== STATS：彩色贴纸 ===== */
   .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    margin: 48px 0 0;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 16px; margin: 64px auto 0; max-width: 860px;
   }
   .stat-item {
-    background: var(--bg-card);
-    padding: 28px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    background: var(--card);
+    border: 3px solid var(--ink);
+    padding: 24px 18px;
+    display: flex; flex-direction: column; gap: 8px;
+    transition: all .15s;
+    box-shadow: 5px 5px 0 var(--ink);
   }
+  .stat-item:nth-child(1){ border-top: 12px solid var(--pink); }
+  .stat-item:nth-child(2){ border-top: 12px solid var(--blue); }
+  .stat-item:nth-child(3){ border-top: 12px solid var(--green); }
+  .stat-item:nth-child(4){ border-top: 12px solid var(--yellow); }
+  .stat-item:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--ink); }
   .stat-num {
-    font-size: 36px;
-    font-weight: 800;
-    color: var(--green);
-    letter-spacing: -0.02em;
-    line-height: 1;
-    font-family: var(--mono);
+    font-family: var(--font-display);
+    font-size: 34px; font-weight: 900; line-height: 1; color: var(--ink);
   }
-  .stat-label { font-size: 13px; color: var(--text-2); }
+  .stat-label { font-size: 12px; color: var(--text-2); font-weight: 700; }
 
-  /* ===== FEATURES ===== */
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-top: 48px;
-  }
+  /* ===== FEATURES：色块卡片 ===== */
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 48px; }
   .feat-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 24px;
-    transition: border-color .2s, transform .2s;
+    background: var(--card);
+    border: 3px solid var(--ink);
+    padding: 24px 22px;
+    position: relative;
+    transition: all .15s;
   }
-  .feat-card:hover {
-    border-color: rgba(29,185,84,0.35);
-    transform: translateY(-3px);
-  }
+  .feat-card:nth-child(3n+1){ border-top: 10px solid var(--pink); }
+  .feat-card:nth-child(3n+2){ border-top: 10px solid var(--blue); }
+  .feat-card:nth-child(3n){ border-top: 10px solid var(--yellow); }
+  .feat-card:hover { transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--ink); }
   .feat-icon {
-    width: 40px; height: 40px;
-    border-radius: var(--radius-md);
-    background: var(--green-dim);
+    width: 44px; height: 44px;
+    border: 3px solid var(--ink);
+    background: var(--cream);
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
+    font-size: 18px; color: var(--ink);
     margin-bottom: 14px;
+    transform: rotate(-3deg);
   }
-  .feat-title {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 8px;
-  }
-  .feat-desc {
-    font-size: 13px;
-    color: var(--text-2);
-    line-height: 1.65;
-  }
+  .feat-title { font-size: 15.5px; font-weight: 900; color: var(--ink); margin-bottom: 8px; font-family: var(--font-bold); }
+  .feat-desc { font-size: 13px; color: var(--text-2); line-height: 1.7; }
 
-  /* ===== FORMAT SUPPORT ===== */
+  /* ===== FORMATS：贴纸 ===== */
   .formats-section { padding-top: 0; }
-  .formats-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 32px;
-  }
+  .formats-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
   .fmt-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-md);
-    background: var(--bg-card);
-    font-family: var(--mono);
-    font-size: 13px;
-    color: var(--text);
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px;
+    border: 3px solid var(--ink);
+    background: var(--card);
+    font-family: var(--font-mono); font-size: 13px; color: var(--ink); font-weight: 700;
+    box-shadow: 3px 3px 0 var(--ink);
+    transition: all .12s;
   }
-  .fmt-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
-  .fmt-chip.special { border-color: rgba(29,185,84,0.4); background: var(--green-dim); }
-  .fmt-chip.special .dot { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .fmt-chip:hover { transform: rotate(-2deg); }
+  .fmt-chip .dot { width: 10px; height: 10px; border: 2px solid var(--ink); background: var(--green); }
+  .fmt-chip.special { background: var(--pink); color: #fff; }
+  .fmt-chip.special .dot { background: var(--yellow); }
+  .fmt-chip.special span { color: #fff; font-size: 10px; font-weight: 700; }
   .fmt-note {
-    margin-top: 16px;
-    padding: 14px 18px;
-    border-radius: var(--radius-md);
-    background: var(--green-dim);
-    border: 1px solid rgba(29,185,84,0.2);
-    font-size: 13px;
-    color: var(--text-2);
-    line-height: 1.65;
+    margin-top: 22px; padding: 16px 20px;
+    border: 3px solid var(--ink);
+    background: var(--yellow);
+    font-size: 13px; color: var(--ink); line-height: 1.7; font-weight: 600;
+    box-shadow: 5px 5px 0 var(--ink);
   }
-  .fmt-note strong { color: var(--green); }
+  .fmt-note strong { text-decoration: underline; }
 
-  /* ===== RECOMMEND ===== */
-  .recommend-section { background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 80px 0; }
-  .recommend-inner { max-width: 1100px; margin: 0 auto; padding: 0 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+  /* ===== RECOMMEND：波浪底 ===== */
+  .recommend-section {
+    background: var(--blue); color: #fff;
+    border-top: 4px solid var(--ink); border-bottom: 4px solid var(--ink);
+    padding: 80px 0;
+    position: relative;
+  }
+  .recommend-section::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 14px;
+    background-image: repeating-linear-gradient(90deg, #fff 0 20px, transparent 20px 40px);
+    opacity: 0.5;
+  }
+  .recommend-inner {
+    max-width: 1100px; margin: 0 auto; padding: 0 40px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center;
+  }
+  .recommend-section .section-label { background: var(--yellow); color: var(--ink); }
+  .recommend-section h2.section-title { color: #fff; }
+  .recommend-section p.section-sub { color: rgba(255,255,255,0.8); }
+  .rule-list { list-style: none; margin-top: 22px; display: flex; flex-direction: column; gap: 12px; }
+  .rule-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; color: rgba(255,255,255,0.92); font-weight: 600; }
+  .rule-list .badge {
+    flex-shrink: 0; width: 26px; height: 26px;
+    background: var(--yellow); color: var(--ink);
+    border: 2px solid var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 900; margin-top: 2px;
+  }
   .formula-box {
-    background: #0d0f14;
-    border: 1px solid var(--border-md);
-    border-radius: var(--radius-lg);
-    padding: 24px;
-    font-family: var(--mono);
-    font-size: 13px;
+    background: var(--cream);
+    color: var(--ink);
+    border: 4px solid var(--ink);
+    padding: 26px;
+    font-family: var(--font-mono); font-size: 13px; font-weight: 700;
+    box-shadow: 8px 8px 0 var(--ink);
   }
   .formula-box .comment { color: var(--text-3); font-size: 12px; }
-  .formula-box .key { color: var(--green); }
-  .formula-box .val { color: #79b8ff; }
-  .formula-box .op { color: var(--text-2); }
+  .formula-box .key { color: var(--blue); }
+  .formula-box .val { color: var(--pink); }
+  .formula-box .op { color: var(--ink); }
   .formula-line { padding: 3px 0; }
-  .formula-divider { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
-  .rule-list { list-style: none; margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
-  .rule-list li {
-    display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--text-2);
-  }
-  .rule-list .badge {
-    flex-shrink: 0;
-    width: 20px; height: 20px;
-    background: var(--green-dim);
-    border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--green);
-    margin-top: 2px;
-  }
+  .formula-divider { border: none; border-top: 2px dashed var(--ink); margin: 12px 0; }
 
-  /* ===== TECH STACK ===== */
-  .tech-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-top: 40px;
-  }
+  /* ===== TECH：黑白 ===== */
+  .tech-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 40px; }
   .tech-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
+    display: flex; align-items: flex-start; gap: 14px;
     padding: 18px 20px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
+    background: var(--card);
+    border: 3px solid var(--ink);
+    transition: all .15s;
   }
-  .tech-bullet {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--green);
-    margin-top: 6px;
-    flex-shrink: 0;
-  }
-  .tech-name { font-size: 14px; font-weight: 600; color: var(--text); font-family: var(--mono); }
-  .tech-role { font-size: 12px; color: var(--text-2); margin-top: 3px; }
+  .tech-item:hover { background: var(--yellow); }
+  .tech-bullet { width: 12px; height: 12px; background: var(--pink); border: 2px solid var(--ink); margin-top: 5px; flex-shrink: 0; }
+  .tech-name { font-size: 14px; font-weight: 900; color: var(--ink); font-family: var(--font-mono); }
+  .tech-role { font-size: 12px; color: var(--text-2); margin-top: 3px; font-weight: 600; }
 
-  /* ===== CHANGELOG ===== */
-  .changelog-section { padding-bottom: 60px; }
-  .changelog-list { margin-top: 40px; display: flex; flex-direction: column; gap: 0; position: relative; }
-  .changelog-list::before {
-    content: '';
-    position: absolute;
-    left: 62px;
-    top: 0; bottom: 0;
-    width: 1px;
-    background: var(--border);
-  }
-  .changelog-item {
-    display: flex;
-    gap: 24px;
-    padding: 16px 0;
-    align-items: flex-start;
-  }
-  .changelog-ver {
-    width: 56px;
-    flex-shrink: 0;
-    font-family: var(--mono);
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--green);
-    text-align: right;
-    padding-top: 2px;
-  }
-  .changelog-dot {
-    width: 13px; height: 13px;
-    border-radius: 50%;
-    background: var(--bg);
-    border: 2px solid var(--border-md);
-    flex-shrink: 0;
-    margin-top: 3px;
-    position: relative;
-    z-index: 1;
-  }
-  .changelog-item.latest .changelog-dot {
-    border-color: var(--green);
-    background: var(--green);
-  }
-  .changelog-body { flex: 1; }
-  .changelog-date { font-size: 11px; color: var(--text-3); margin-bottom: 4px; }
-  .changelog-desc { font-size: 13px; color: var(--text-2); line-height: 1.65; }
-  .changelog-desc strong { color: var(--text); }
-
-  /* ===== DOWNLOAD CTA ===== */
+  /* ===== DOWNLOAD CTA：大色块 ===== */
   .download-cta {
-    background: var(--bg-card);
-    border-top: 1px solid var(--border);
+    background: var(--pink); color: #fff;
+    border-top: 4px solid var(--ink);
     padding: 80px 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 24px;
+    display: flex; flex-direction: column; align-items: center; text-align: center; gap: 24px;
+    position: relative;
   }
-  .download-cta h2 { font-size: 36px; font-weight: 800; color: var(--text); }
-  .download-cta p  { font-size: 15px; color: var(--text-2); max-width: 480px; line-height: 1.7; }
-  .download-meta {
-    display: flex; align-items: center; gap: 16px;
-    font-size: 12px; color: var(--text-3);
+  .download-cta::before {
+    content: ""; position: absolute; left: 24px; bottom: 24px;
+    width: 60px; height: 60px; border-radius: 50%;
+    background: var(--yellow); border: 3px solid var(--ink);
   }
-  .download-meta .sep { opacity: 0.3; }
+  .download-cta::after {
+    content: ""; position: absolute; right: 40px; top: 30px;
+    width: 40px; height: 40px;
+    background: var(--blue); border: 3px solid var(--ink);
+    transform: rotate(45deg);
+  }
+  .download-cta .section-label { background: var(--ink); color: var(--cream); }
+  .download-cta h2 { font-family: var(--font-display); font-size: 38px; font-weight: 900; color: #fff; }
+  .download-cta p { font-size: 15px; color: rgba(255,255,255,0.9); max-width: 480px; line-height: 1.75; font-weight: 600; }
+  .download-cta .btn-primary { background: var(--green); box-shadow: 6px 6px 0 var(--ink); }
+  .download-cta .btn-primary:hover { background: var(--yellow); color: var(--ink); }
+  .download-meta { display: flex; align-items: center; gap: 16px; font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.85); letter-spacing: 0.06em; font-weight: 700; }
+  .download-meta .sep { opacity: 0.5; }
 
   /* ===== FOOTER ===== */
   footer {
-    border-top: 1px solid var(--border);
-    padding: 28px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 12px;
-    color: var(--text-3);
-    max-width: 100%;
+    border-top: 4px solid var(--ink);
+    background: var(--ink); color: var(--cream);
+    padding: 26px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em;
   }
+  footer .brand-foot { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+  footer .box { width: 18px; height: 18px; background: var(--pink); border: 2px solid var(--cream); }
+  footer .pop { color: var(--yellow); font-weight: 700; }
 
   /* ===== RESPONSIVE ===== */
   @media (max-width: 900px) {
     .nav-links { display: none; }
     section { padding: 60px 24px; }
+    .hero-inner { grid-template-columns: 1fr; gap: 36px; }
+    .hero { padding: 50px 24px 60px; }
     .features-grid { grid-template-columns: 1fr 1fr; }
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
     .tech-grid { grid-template-columns: 1fr 1fr; }
     .recommend-inner { grid-template-columns: 1fr; }
     .mock-player { grid-template-columns: 1fr; }
     .mock-right { display: none; }
-    .changelog-list::before { left: 58px; }
   }
   @media (max-width: 600px) {
     .features-grid { grid-template-columns: 1fr; }
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
     .tech-grid { grid-template-columns: 1fr; }
-    .hero h1 { font-size: 32px; }
-    footer { flex-direction: column; gap: 8px; text-align: center; }
+    .hero h1 { font-size: 34px; }
+    footer { flex-direction: column; gap: 10px; text-align: center; }
   }
 </style>
 </head>
@@ -627,14 +522,12 @@
 
 <!-- ===== NAV ===== -->
 <nav class="nav">
-  <div style="display:flex;align-items:center;gap:16px">
+  <div style="display:flex;align-items:center;gap:18px">
     <div class="nav-logo">
-      <div class="eq-icon">
-        <span></span><span></span><span></span><span></span><span></span>
-      </div>
-      Spotify Music
+      <span class="box">♪</span>
+      BOOMBOX
     </div>
-    <a href="/" style="display:flex;align-items:center;gap:6px;color:var(--text-2);font-size:13px;transition:color .2s" title="返回 Hermes Study 主页">← Hermes Study</a>
+    <a href="/" style="color:var(--ink);font-size:13px;font-weight:700;border-bottom:2px solid var(--ink);transition:opacity .2s" title="返回 Hermes Study 主页">← Hermes Study</a>
   </div>
   <ul class="nav-links">
     <li><a href="#features">功能</a></li>
@@ -646,102 +539,92 @@
 
 <!-- ===== HERO ===== -->
 <div class="hero">
-  <div class="hero-badge">
-    <span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block"></span>
-    v2.4 · 最新版本
-  </div>
-  <h1>Spotify桌面<em>音乐播放器</em></h1>
-  <p>Spotify 深色风格 · 粒子动画 · 智能推荐 · 双击即用<br>无需任何依赖，完整支持 .mflac / .ncm 加密格式</p>
-  <div class="hero-btns">
-    <a href="/api/music-player/download" class="btn-primary">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-5-5h3V2h4v5h3z"/><path d="M14 13H2v1.5h12z"/></svg>
-      免费下载 (45 MB)
-    </a>
-    <a href="#features" class="btn-secondary">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 5.5l4 2.5-4 2.5z"/></svg>
-      查看功能
-    </a>
-  </div>
-
-  <!-- 模拟播放器截图 -->
-  <div class="preview-wrap">
-    <div class="preview-glow"></div>
-    <div class="preview-frame">
-      <div class="preview-bar">
-        <div class="dot dot-red"></div>
-        <div class="dot dot-amber"></div>
-        <div class="dot dot-green"></div>
-        <div class="title">◉ Spotify MUSIC &nbsp;&nbsp;&nbsp; DISCOVER &nbsp; LIBRARY &nbsp;&nbsp; 14:32 &nbsp; ▶5 ♥2 ⏭1</div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">● v2.4 · 最新版本</div>
+      <h1>把音乐<br>装进<span class="hl-pink">BOOM</span><br>把节奏<span class="hl-blue">开大</span></h1>
+      <p>孟菲斯色块 · 粒子律动 · 智能推荐 · 双击即用<br>完整支持 .mflac / .ncm 加密格式</p>
+      <div class="hero-btns">
+        <a href="/api/music-player/download" class="btn-primary">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-5-5h3V2h4v5h3z"/><path d="M14 13H2v1.5h12z"/></svg>
+          免费下载 (45 MB)
+        </a>
+        <a href="#features" class="btn-secondary">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.5 5.5l4 2.5-4 2.5z"/></svg>
+          查看功能
+        </a>
       </div>
-      <div class="mock-player">
-        <!-- 左栏：播放器 -->
-        <div class="mock-left">
-          <div class="mock-album">
-            <canvas id="particleCanvas" width="220" height="220"></canvas>
-            <div class="mock-album-text">
+    </div>
 
+    <!-- BOOMBOX 预览 -->
+    <div class="preview-wrap">
+      <div class="preview-frame">
+        <div class="mock-player">
+          <div class="mock-left">
+            <div class="mock-album">
+              <div class="disc"></div>
+              <canvas id="particleCanvas" width="220" height="220"></canvas>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="mock-controls">
+              <div class="ctrl-btn">⏮</div>
+              <div class="ctrl-btn">⤨</div>
+              <div class="ctrl-btn play" id="playBtn">▶</div>
+              <div class="ctrl-btn">⏭</div>
+              <div class="ctrl-btn">⏸</div>
+            </div>
+            <div class="vol-row">
+              <span>VOL</span>
+              <div class="vol-track"><div class="vol-fill"></div></div>
+              <span>55</span>
             </div>
           </div>
-          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-          <div class="mock-controls">
-            <div class="ctrl-btn">⏮</div>
-            <div class="ctrl-btn">⤨</div>
-            <div class="ctrl-btn play" id="playBtn">▶</div>
-            <div class="ctrl-btn">⏭</div>
-            <div class="ctrl-btn">⏸</div>
-          </div>
-          <div class="vol-row">
-            <span>VOL</span>
-            <div class="vol-track"><div class="vol-fill"></div></div>
-            <span>55</span>
-          </div>
-        </div>
-        <!-- 右栏：曲目列表 -->
-        <div class="mock-right">
-          <div class="mock-tabs">
-            <div class="mock-tab active">今日推荐</div>
-            <div class="mock-tab">探索</div>
-            <div class="mock-tab">ALL</div>
-          </div>
-          <div class="mock-track playing">
-            <div class="mock-track-num">01</div>
-            <div class="mock-track-info">
-              <div class="mock-track-name">江湖流 <span class="mock-track-tag">喜爱艺人</span></div>
-              <div class="mock-track-artist">C-BLOCK / GAI周延</div>
+          <div class="mock-right">
+            <div class="mock-tabs">
+              <div class="mock-tab active">今日推荐</div>
+              <div class="mock-tab">探索</div>
+              <div class="mock-tab">ALL</div>
             </div>
-            <div class="mock-track-actions"><span>♥</span><span>⏭</span></div>
-          </div>
-          <div class="mock-track">
-            <div class="mock-track-num">02</div>
-            <div class="mock-track-info">
-              <div class="mock-track-name">工厂</div>
-              <div class="mock-track-artist">河南说唱之神</div>
+            <div class="mock-track playing">
+              <div class="mock-track-num">01</div>
+              <div class="mock-track-info">
+                <div class="mock-track-name">江湖流 <span class="mock-track-tag">喜爱艺人</span></div>
+                <div class="mock-track-artist">C-BLOCK / GAI周延</div>
+              </div>
+              <div class="mock-track-actions"><span>♥</span><span>⏭</span></div>
             </div>
-            <div class="mock-track-actions"><span>♥</span><span>⏭</span></div>
-          </div>
-          <div class="mock-track">
-            <div class="mock-track-num">03</div>
-            <div class="mock-track-info">
-              <div class="mock-track-name">林宛瑜 <span class="mock-track-tag">新鲜</span></div>
-              <div class="mock-track-artist">Rapeter</div>
+            <div class="mock-track">
+              <div class="mock-track-num">02</div>
+              <div class="mock-track-info">
+                <div class="mock-track-name">工厂</div>
+                <div class="mock-track-artist">河南说唱之神</div>
+              </div>
+              <div class="mock-track-actions"><span>♥</span><span>⏭</span></div>
             </div>
-            <div class="mock-track-actions"><span>♥</span><span>⏭</span></div>
-          </div>
-          <div class="mock-track">
-            <div class="mock-track-num">04</div>
-            <div class="mock-track-info">
-              <div class="mock-track-name">一丝不挂</div>
-              <div class="mock-track-artist">陈奕迅</div>
+            <div class="mock-track">
+              <div class="mock-track-num">03</div>
+              <div class="mock-track-info">
+                <div class="mock-track-name">林宛瑜 <span class="mock-track-tag">新鲜</span></div>
+                <div class="mock-track-artist">Rapeter</div>
+              </div>
+              <div class="mock-track-actions"><span>♥</span><span>⏭</span></div>
             </div>
-            <div class="mock-track-actions"><span>♥</span><span>⏭</span></div>
-          </div>
-          <div class="mock-track">
-            <div class="mock-track-num">05</div>
-            <div class="mock-track-info">
-              <div class="mock-track-name">真心话就是大冒险</div>
-              <div class="mock-track-artist">河南说唱之神</div>
+            <div class="mock-track">
+              <div class="mock-track-num">04</div>
+              <div class="mock-track-info">
+                <div class="mock-track-name">一丝不挂</div>
+                <div class="mock-track-artist">陈奕迅</div>
+              </div>
+              <div class="mock-track-actions"><span>♥</span><span>⏭</span></div>
             </div>
-            <div class="mock-track-actions"><span>♥</span><span>⏭</span></div>
+            <div class="mock-track">
+              <div class="mock-track-num">05</div>
+              <div class="mock-track-info">
+                <div class="mock-track-name">真心话就是大冒险</div>
+                <div class="mock-track-artist">河南说唱之神</div>
+              </div>
+              <div class="mock-track-actions"><span>♥</span><span>⏭</span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -749,7 +632,7 @@
   </div>
 
   <!-- 数据统计 -->
-  <div class="stats-grid" style="max-width:820px;width:100%">
+  <div class="stats-grid">
     <div class="stat-item">
       <div class="stat-num">7+</div>
       <div class="stat-label">支持音频格式</div>
@@ -783,7 +666,7 @@
     <div class="feat-card">
       <div class="feat-icon">◎</div>
       <div class="feat-title">彩色粒子动画</div>
-      <div class="feat-desc">封面区域在播放时显示粒子爆炸动画，颜色随机从绿/青/紫/粉循环，30fps 节拍律动。</div>
+      <div class="feat-desc">封面区域在播放时显示粒子爆炸动画，颜色随机从粉/蓝/黄循环，30fps 节拍律动。</div>
     </div>
     <div class="feat-card">
       <div class="feat-icon">⚡</div>
@@ -820,8 +703,8 @@
     <div class="fmt-chip"><div class="dot"></div>.wav</div>
     <div class="fmt-chip"><div class="dot"></div>.m4a</div>
     <div class="fmt-chip"><div class="dot"></div>.wma</div>
-    <div class="fmt-chip special"><div class="dot"></div>.mflac <span style="font-size:10px;color:var(--text-3);margin-left:4px">QQ音乐加密</span></div>
-    <div class="fmt-chip special"><div class="dot"></div>.ncm <span style="font-size:10px;color:var(--text-3);margin-left:4px">网易云加密</span></div>
+    <div class="fmt-chip special"><div class="dot"></div>.mflac <span>QQ音乐加密</span></div>
+    <div class="fmt-chip special"><div class="dot"></div>.ncm <span>网易云加密</span></div>
   </div>
   <div class="fmt-note">
     <strong>.mflac</strong> 采用 QMCv2 XOR 算法解密；<strong>.ncm</strong> 采用移植自 ncmdump 的 AES + RC4 纯 Python 实现。解密后文件仅在内存中存在，关闭播放器自动清理，不保存到磁盘。
@@ -833,7 +716,7 @@
   <div class="recommend-inner">
     <div>
       <div class="section-label">推荐引擎</div>
-      <h2 class="section-title" style="font-size:26px">了解你的<br>音乐品味</h2>
+      <h2 class="section-title" style="font-size:28px">了解你的<br>音乐品味</h2>
       <p class="section-sub" style="margin-bottom:0">每一次喜欢或跳过都在训练属于你的偏好模型，随着使用时间增长，推荐越来越准。</p>
       <ul class="rule-list">
         <li><div class="badge">♥</div><div>喜欢一首歌，该艺人权重 +1，同艺人所有歌曲得分上涨</div></li>
@@ -903,69 +786,12 @@
   </div>
 </section>
 
-<!-- ===== CHANGELOG =====
-<section id="changelog" class="changelog-section">
-  <div class="section-label">版本历史</div>
-  <h2 class="section-title">持续迭代，快速进化</h2>
-  <div class="changelog-list">
-    <div class="changelog-item latest">
-      <div class="changelog-ver">v2.4</div>
-      <div class="changelog-dot"></div>
-      <div class="changelog-body">
-        <div class="changelog-date">2026-06-04</div>
-        <div class="changelog-desc"><strong>窗口缩放自适应</strong> · 🔀 随机播放 · 视图平滑过渡 · 修复列表行高缩放遮挡 · 程序图标修复</div>
-      </div>
-    </div>
-    <div class="changelog-item">
-      <div class="changelog-ver">v2.3.1</div>
-      <div class="changelog-dot"></div>
-      <div class="changelog-body">
-        <div class="changelog-date">2026-06-03</div>
-        <div class="changelog-desc">TODAY 改名「今日推荐」；↻ 同时刷新今日推荐+探索</div>
-      </div>
-    </div>
-    <div class="changelog-item">
-      <div class="changelog-ver">v2.3</div>
-      <div class="changelog-dot"></div>
-      <div class="changelog-body">
-        <div class="changelog-date">2026-06-03</div>
-        <div class="changelog-desc">重设计均衡器图标（立柱式绿/渐变）；exe 改名 Music-player.exe</div>
-      </div>
-    </div>
-    <div class="changelog-item">
-      <div class="changelog-ver">v2.2.4</div>
-      <div class="changelog-dot"></div>
-      <div class="changelog-body">
-        <div class="changelog-date">2026-06-03</div>
-        <div class="changelog-desc">NCM 解密算法从 ncmdump 源码移植，纯 Python 实现，不依赖外部工具</div>
-      </div>
-    </div>
-    <div class="changelog-item">
-      <div class="changelog-ver">v2.2</div>
-      <div class="changelog-dot"></div>
-      <div class="changelog-body">
-        <div class="changelog-date">2026-06-03</div>
-        <div class="changelog-desc">上下首按当前列表播放；新增「探索」模式；📁 选择音乐目录按钮</div>
-      </div>
-    </div>
-    <div class="changelog-item">
-      <div class="changelog-ver">v2.1</div>
-      <div class="changelog-dot"></div>
-      <div class="changelog-body">
-        <div class="changelog-date">2026-06-03</div>
-        <div class="changelog-desc">Spotify 风格重做 · 粒子动画 · 进度条拖动 · MFLAC 支持</div>
-      </div>
-    </div>
-  </div>
-</section>
--->
-
 <!-- ===== DOWNLOAD CTA ===== -->
 <div class="download-cta" id="download">
   <div class="section-label">立即体验</div>
   <h2>免费下载，双击即用</h2>
   <p>无需安装任何依赖，无需配置环境。下载 exe 文件，双击运行，把你的音乐文件夹拖进去，开始享受。</p>
-  <a href="/api/music-player/download" class="btn-primary" style="font-size:15px;padding:15px 36px">
+  <a href="/api/music-player/download" class="btn-primary" style="font-size:15px;padding:16px 38px">
     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-5-5h3V2h4v5h3z"/><path d="M14 13H2v1.5h12z"/></svg>
     下载 Music-player.exe
   </a>
@@ -982,30 +808,24 @@
 
 <!-- ===== FOOTER ===== -->
 <footer>
-  <div style="display:flex;align-items:center;gap:8px">
-    <div style="display:flex;align-items:flex-end;gap:2px;height:14px">
-      <span style="width:2px;height:6px;background:var(--green);border-radius:1px"></span>
-      <span style="width:2px;height:11px;background:var(--green);border-radius:1px"></span>
-      <span style="width:2px;height:8px;background:var(--green);border-radius:1px"></span>
-      <span style="width:2px;height:13px;background:var(--green);border-radius:1px"></span>
-      <span style="width:2px;height:5px;background:var(--green);border-radius:1px"></span>
-    </div>
-    <span>Spotify Music Player</span>
-    <span style="color:var(--text-3)">·</span>
+  <div class="brand-foot">
+    <span class="box"></span>
+    <span>BOOMBOX</span>
+    <span style="opacity:0.5">·</span>
     <span>part of Hermes Study</span>
   </div>
-  <div>Built with PyQt5 · SQLite · pygame &nbsp;·&nbsp; <span style="color:var(--green)">v2.4</span></div>
+  <div>Built with PyQt5 · SQLite · pygame &nbsp;·&nbsp; <span class="pop">v2.4</span></div>
 </footer>
 
 <script>
-/* ===== 粒子动画 (canvas) ===== */
+/* ===== 粒子动画 (canvas) — 孟菲斯亮色 ===== */
 (function() {
   const canvas = document.getElementById('particleCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   const cx = W / 2, cy = H / 2;
-  const colors = ['#1db954','#00e5ff','#b44fff','#ff6ec7','#7fff6e'];
+  const colors = ['#ff4f9a','#2b7fff','#ffd500','#00c853','#ff7a1a'];
   let particles = [];
   let energy = 0.5;
   let frame = 0;
@@ -1034,7 +854,7 @@
 
     /* glow */
     const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 70);
-    grad.addColorStop(0, `rgba(29,185,84,${0.06 + energy * 0.08})`);
+    grad.addColorStop(0, `rgba(255,79,154,${0.08 + energy * 0.1})`);
     grad.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = grad;
     ctx.beginPath();
