@@ -3,443 +3,481 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>hermes-study · 个人项目集</title>
+<title>HERMES·STUDY 日报</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <style>
 /* ============================================================
-   Layer 1: Design Tokens — Swiss Editorial
+   HERMES DAILY — 报纸经典风
+   米黄纸 + 墨黑 + 朱红，衬线报头 + 双线分隔 + 豆腐块栏目
    ============================================================ */
 :root {
-  --paper:      #f5f1e7;   /* 纸张米白 */
-  --paper-2:    #efe9db;   /* 深一档纸张 */
-  --card:       #fbf8f1;   /* 卡片纸 */
-  --ink:        #16130d;   /* 墨黑 */
-  --ink-2:      #4a443a;   /* 次级墨 */
-  --ink-3:      #8a8272;   /* 弱墨 */
-  --line:       #dcd4c2;   /* 细线 */
-  --line-strong:#a89e88;   /* 粗线 */
-
-  --accent:     #1446a0;   /* 克莱因蓝变体，主强调 */
-  --accent-ink: #0c2d66;
-
-  --teal:  #0d7a5f;
-  --pink:  #c2456b;
-  --blue:  #2456c4;
-  --amber: #b46a1f;
-
-  --radius: 0;             /* 编辑风：无圆角 */
-  --font-sans: 'Archivo', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+  --paper:      #f6f0e2;   /* 报纸米黄 */
+  --paper-2:    #efe6d2;
+  --card:       #fbf7ec;
+  --ink:        #1c1a16;   /* 墨黑 */
+  --ink-2:      #5a5347;
+  --ink-3:      #9a8f7c;
+  --red:        #c0392b;   /* 报纸朱红（涨） */
+  --red-soft:   rgba(192,57,43,0.08);
+  --green:      #1e7d4f;   /* 跌绿 */
+  --green-soft: rgba(30,125,79,0.08);
+  --line:       #c9bd9e;   /* 细线 */
+  --line-strong:#1c1a16;   /* 粗线 */
+  --font-serif: 'Playfair Display', 'Songti SC', 'SimSun', serif;
+  --font-body:  'Songti SC', 'SimSun', 'PingFang SC', 'Microsoft YaHei', serif;
+  --font-mono:  'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
   --ease: 180ms cubic-bezier(0.4,0,0.2,1);
 }
-
 [data-theme="dark"] {
-  --paper:      #131210;
-  --paper-2:    #1b1915;
-  --card:       #191713;
-  --ink:        #e8e2d4;
-  --ink-2:      #a9a293;
-  --ink-3:      #6b6455;
-  --line:       #2b2822;
-  --line-strong:#4a443a;
-
-  --accent:     #7aa2ff;
-  --accent-ink: #b3c7ff;
-
-  --teal:  #3ecf9e;
-  --pink:  #f08bab;
-  --blue:  #8ab0ff;
-  --amber: #e8a654;
+  --paper:      #14120e;   /* 深夜报纸 */
+  --paper-2:    #1b1813;
+  --card:       #1d1a14;
+  --ink:        #e8e0cf;
+  --ink-2:      #a89c86;
+  --ink-3:      #6b6150;
+  --red:        #e0665a;
+  --red-soft:   rgba(224,102,90,0.12);
+  --green:      #4ecb8d;
+  --green-soft: rgba(78,203,141,0.12);
+  --line:       #3a342a;
+  --line-strong:#e8e0cf;
 }
 
-/* ============================================================
-   Layer 2: Reset & Base
-   ============================================================ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:15px;scroll-behavior:smooth}
 body{
-  font-family:var(--font-sans);
-  background:var(--paper);
+  font-family:var(--font-body);
+  background:
+    radial-gradient(ellipse 60% 30% at 50% -5%, rgba(192,57,43,0.04), transparent),
+    var(--paper);
   color:var(--ink);
   min-height:100vh;
   -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
   transition:background var(--ease), color var(--ease);
 }
-::selection{background:var(--accent);color:var(--paper)}
+::selection{background:var(--red);color:#fff}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--line-strong)}
+::-webkit-scrollbar-thumb{background:var(--line)}
+::-webkit-scrollbar-thumb:hover{background:var(--ink-3)}
 a{color:inherit;text-decoration:none}
 
-/* ============================================================
-   Layer 3: Layout — editorial grid
-   ============================================================ */
-.page{
-  max-width:1080px;
-  margin:0 auto;
-  padding:0 48px;
-  position:relative;
-}
-
-/* ---- Top rules: 顶部双线 ---- */
-.topline{height:3px;background:var(--ink);margin-top:0}
-.topline::after{content:"";display:block;height:1px;background:var(--ink);margin-top:3px}
+.page{max-width:1080px;margin:0 auto;padding:0 40px 60px;position:relative}
 
 /* ============================================================
-   Layer 4: Components
+   报头 Masthead
    ============================================================ */
-
-/* ---- Masthead ---- */
 .masthead{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:22px 0;border-bottom:1px solid var(--line);
-}
-.brand{display:flex;align-items:baseline;gap:14px}
-.brand-name{font-weight:900;font-size:16px;letter-spacing:0.02em}
-.brand-sub{font-family:var(--font-mono);font-size:10px;color:var(--ink-3);letter-spacing:0.14em;text-transform:uppercase}
-.nav{display:flex;align-items:center;gap:26px}
-.nav a{
-  font-size:13px;font-weight:700;color:var(--ink-2);
-  letter-spacing:0.04em;
+  padding:28px 0 16px;
+  border-bottom:3px double var(--ink);
   position:relative;
-  padding:4px 0;
-  transition:color var(--ease);
 }
-.nav a::after{
-  content:"";position:absolute;left:0;bottom:0;height:2px;width:0;
-  background:var(--accent);transition:width var(--ease);
-}
-.nav a:hover{color:var(--ink)}
-.nav a:hover::after{width:100%}
-.nav .idx{font-family:var(--font-mono);font-size:9px;color:var(--ink-3);margin-right:5px}
-.theme-toggle{
-  width:34px;height:34px;border:1px solid var(--line-strong);background:transparent;
-  color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:all var(--ease);
-}
-.theme-toggle:hover{border-color:var(--ink);background:var(--ink);color:var(--paper)}
-
-/* ---- Hero ---- */
-.hero{padding:56px 0 40px;border-bottom:1px solid var(--line)}
-.hero-kicker{
-  display:flex;align-items:center;gap:12px;
-  font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;
+.masthead-top{
+  display:flex;align-items:center;justify-content:space-between;
+  font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;
   color:var(--ink-3);text-transform:uppercase;
-  margin-bottom:22px;
+  margin-bottom:10px;
 }
-.hero-kicker .tick{width:8px;height:8px;background:var(--accent);display:inline-block}
-.hero-kicker .date{margin-left:auto}
-.hero-title{
-  font-size:clamp(40px,6.5vw,68px);
-  font-weight:900;
-  line-height:1.04;
-  letter-spacing:-0.02em;
+.masthead-title{
+  font-family:var(--font-serif);
+  font-size:clamp(40px,7vw,64px);
+  font-weight:900;letter-spacing:0.02em;
+  text-align:center;line-height:1;
   color:var(--ink);
 }
-.hero-title .em{
-  color:var(--accent);
-  position:relative;
-  white-space:nowrap;
+.masthead-title .amp{
+  font-style:italic;color:var(--red);
 }
-.hero-title .em::after{
-  content:"";position:absolute;left:0;right:0;bottom:0.06em;height:0.28em;
-  background:var(--accent);opacity:0.15;z-index:-1;
+.masthead-sub{
+  text-align:center;margin-top:10px;
+  font-family:var(--font-serif);font-size:13px;color:var(--ink-2);
+  letter-spacing:0.5em;text-transform:uppercase;
 }
-.hero-sub{
-  margin-top:20px;font-size:15px;color:var(--ink-2);
-  max-width:560px;line-height:1.9;
-}
-.hero-sub .muted{color:var(--ink-3)}
+.masthead-sub .star{color:var(--red)}
 
-/* ---- Ticker 报价条 ---- */
-.ticker{
-  display:flex;align-items:stretch;border-bottom:1px solid var(--line);
-  font-family:var(--font-mono);
+/* ============================================================
+   栏目条 Nav
+   ============================================================ */
+.navbar{
+  display:flex;align-items:center;gap:0;
+  border-bottom:2px solid var(--ink);
+  padding:6px 0;
+  margin-bottom:28px;
 }
-.ticker-label{
-  display:flex;align-items:center;gap:8px;
-  padding:14px 18px;background:var(--ink);color:var(--paper);
-  font-size:10px;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;
-  white-space:nowrap;
-}
-.ticker-label .dot{width:6px;height:6px;background:var(--accent);animation:pulse 2s ease-in-out infinite}
-.ticker-item{
-  display:flex;align-items:baseline;gap:12px;
-  padding:14px 22px;border-right:1px solid var(--line);flex:1;
-}
-.ticker-item .name{font-size:10px;letter-spacing:0.12em;color:var(--ink-3);text-transform:uppercase}
-.ticker-item .val{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-0.02em}
-.ticker-item .chg{font-size:12px;font-weight:700}
-.ticker-item .chg.up{color:var(--teal)}
-.ticker-item .chg.down{color:var(--pink)}
-.ticker-item .meta{margin-left:auto;font-size:10px;color:var(--ink-3)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.25}}
-
-/* ---- Section header ---- */
-.sec-head{
-  display:flex;align-items:center;gap:16px;
-  padding:44px 0 18px;
-}
-.sec-head .no{font-family:var(--font-mono);font-size:11px;color:var(--accent);font-weight:700}
-.sec-head .title{font-size:11px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink)}
-.sec-head .rule{flex:1;height:1px;background:var(--line)}
-.sec-head .count{font-family:var(--font-mono);font-size:11px;color:var(--ink-3)}
-
-/* ---- Apps grid: 4-col editorial cards ---- */
-.apps{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-bottom:none}
-.app-card{
-  position:relative;
-  background:var(--card);
+.navbar a{
+  flex:1;text-align:center;
+  font-family:var(--font-serif);font-size:14px;font-weight:700;
+  color:var(--ink-2);padding:6px 4px;
   border-right:1px solid var(--line);
-  border-bottom:1px solid var(--line);
-  padding:26px 22px 22px;
-  display:flex;flex-direction:column;
-  min-height:210px;
-  transition:background var(--ease);
+  transition:color var(--ease);
+  position:relative;
 }
-.app-card:nth-child(4n){border-right:none}
-.app-card::before{
-  content:"";position:absolute;top:0;left:0;right:0;height:3px;
-  background:var(--accent);transform:scaleX(0);transform-origin:left;
-  transition:transform 260ms var(--ease);
+.navbar a:last-child{border-right:none}
+.navbar a:hover{color:var(--red)}
+.navbar a .n-idx{
+  font-family:var(--font-mono);font-size:8px;color:var(--ink-3);
+  display:block;letter-spacing:0.2em;margin-bottom:1px;
 }
-.app-card:hover{background:var(--paper-2)}
-.app-card:hover::before{transform:scaleX(1)}
-.app-card .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:34px}
-.app-card .no{font-family:var(--font-mono);font-size:10px;color:var(--ink-3);font-weight:700}
-.app-card .icon{width:22px;height:22px;color:var(--ink-2);transition:color var(--ease), transform var(--ease)}
-.app-card:hover .icon{color:var(--accent);transform:translateY(-2px)}
-.app-card .name{font-size:17px;font-weight:900;letter-spacing:-0.01em}
-.app-card .desc{font-size:12px;color:var(--ink-2);margin-top:3px;line-height:1.5}
-.app-card .foot{margin-top:auto;padding-top:14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline}
-.app-card .stat{font-family:var(--font-mono);font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}
-.app-card .stat small{font-size:9px;color:var(--ink-3);font-weight:500;letter-spacing:0.08em;margin-right:5px;text-transform:uppercase}
-.app-card .tag{font-family:var(--font-mono);font-size:9px;color:var(--ink-3);letter-spacing:0.1em;text-transform:uppercase}
-.app-card.teal   .stat{color:var(--teal)}
-.app-card.pink   .stat{color:var(--pink)}
-.app-card.blue   .stat{color:var(--blue)}
-.app-card.amber  .stat{color:var(--amber)}
-.app-card .accent-dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:6px}
-.app-card.teal .accent-dot{background:var(--teal)}
-.app-card.pink .accent-dot{background:var(--pink)}
-.app-card.blue .accent-dot{background:var(--blue)}
-.app-card.amber .accent-dot{background:var(--amber)}
+.navbar-right{
+  display:flex;align-items:center;gap:8px;
+  padding-left:14px;border-left:1px solid var(--line-strong);
+}
+.theme-toggle{
+  width:32px;height:32px;border:1px solid var(--line-strong);
+  background:var(--card);color:var(--ink);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all var(--ease);
+}
+.theme-toggle:hover{background:var(--ink);color:var(--paper)}
+.theme-toggle svg{width:14px;height:14px}
 
-/* ---- Tech strip ---- */
-.tech{
-  border:1px solid var(--line);
-  border-top:none;
-  display:flex;flex-wrap:wrap;
+/* ============================================================
+   头条区 Headline
+   ============================================================ */
+.headline{
+  display:grid;grid-template-columns:1.4fr 1fr;
+  gap:24px;margin-bottom:34px;
+  border-bottom:2px solid var(--ink);
+  padding-bottom:26px;
+}
+.headline-main{
+  border-top:2px solid var(--ink);
+  padding-top:18px;
+}
+.headline-label{
+  font-family:var(--font-mono);font-size:10px;font-weight:700;
+  letter-spacing:0.24em;text-transform:uppercase;
+  color:var(--red);margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;
+}
+.headline-label::before{content:"▲";font-size:8px}
+.headline-title{
+  font-family:var(--font-serif);
+  font-size:30px;font-weight:900;line-height:1.15;
+  letter-spacing:0.01em;margin-bottom:16px;
+}
+.headline-quote{
+  display:flex;align-items:baseline;gap:14px;
+  border-bottom:1px solid var(--line);
+  padding-bottom:14px;margin-bottom:14px;
+}
+.headline-price{
+  font-family:var(--font-mono);
+  font-size:clamp(44px,6vw,58px);font-weight:700;
+  font-variant-numeric:tabular-nums;line-height:1;
+}
+.headline-price .dec{font-size:0.5em;color:var(--ink-3)}
+.headline-price.up{color:var(--red)}
+.headline-price.down{color:var(--green)}
+.headline-chg{
+  font-family:var(--font-mono);font-size:15px;font-weight:700;
+  display:flex;align-items:center;gap:8px;
+}
+.headline-chg.up{color:var(--red)}
+.headline-chg.down{color:var(--green)}
+.headline-chg .chg-extra{font-weight:400;font-size:12px;color:var(--ink-3)}
+.headline-meta{
+  display:flex;align-items:center;justify-content:space-between;
+  font-family:var(--font-mono);font-size:10px;color:var(--ink-3);
+  letter-spacing:0.1em;text-transform:uppercase;
+}
+.headline-meta .live{
+  color:var(--red);font-weight:700;
+}
+.headline-meta .live::before{
+  content:"●";font-size:7px;margin-right:5px;
+  animation:blink 1.4s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* 右栏豆腐块 */
+.headline-side{border-top:2px solid var(--ink);padding-top:18px;display:flex;flex-direction:column;gap:16px}
+.side-item{
+  border-bottom:1px solid var(--line);padding-bottom:14px;
+}
+.side-item:last-child{border-bottom:none}
+.side-kicker{
+  font-family:var(--font-mono);font-size:9px;font-weight:700;
+  letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-3);
+  margin-bottom:8px;
+}
+.side-kicker em{font-style:normal;color:var(--red)}
+.side-title{
+  font-family:var(--font-serif);font-size:20px;font-weight:900;
+  line-height:1.3;margin-bottom:8px;
+}
+.side-title .num{
+  font-family:var(--font-mono);font-size:22px;color:var(--red);
+  margin-right:6px;
+}
+.side-desc{font-size:12px;color:var(--ink-2);line-height:1.7}
+.side-stats{display:flex;gap:12px;margin-top:10px}
+.side-stat{flex:1;border:1px solid var(--line);padding:8px 10px;text-align:center;background:var(--card)}
+.side-stat .v{font-family:var(--font-mono);font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+.side-stat .v.red{color:var(--red)}
+.side-stat .l{font-size:9px;color:var(--ink-3);margin-top:2px;letter-spacing:0.1em}
+
+/* ============================================================
+   应用豆腐块
+   ============================================================ */
+.section-head{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:18px;
+}
+.section-head .no{
+  font-family:var(--font-mono);font-size:10px;font-weight:700;
+  color:var(--red);letter-spacing:0.1em;
+}
+.section-head .title{
+  font-family:var(--font-serif);font-size:15px;font-weight:900;
+  letter-spacing:0.3em;text-transform:uppercase;white-space:nowrap;
+}
+.section-head .rule{
+  flex:1;border-bottom:2px solid var(--ink);
+  transform:translateY(-50%);
+}
+.section-head .count{font-family:var(--font-mono);font-size:10px;color:var(--ink-3)}
+
+/* 豆腐块网格：2 列 + 底部横幅 */
+.apps{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:20px 24px;
+  margin-bottom:34px;
+}
+.app{
+  border-top:3px solid var(--ink);
+  padding-top:14px;
+  transition:background var(--ease);
+  position:relative;
+}
+.app:hover{background:var(--paper-2)}
+.app .app-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin-bottom:10px;
+}
+.app .app-name{
+  font-family:var(--font-serif);font-size:19px;font-weight:900;
+  letter-spacing:0.04em;
+}
+.app .app-name .colon{color:var(--red)}
+.app .app-no{
+  font-family:var(--font-mono);font-size:10px;color:var(--ink-3);
+  letter-spacing:0.14em;
+}
+.app .app-desc{font-size:12.5px;color:var(--ink-2);line-height:1.7;margin-bottom:12px}
+.app .app-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid var(--line);padding-top:10px;
+  font-family:var(--font-mono);font-size:10px;color:var(--ink-3);
+  letter-spacing:0.1em;text-transform:uppercase;
+}
+.app .app-foot .stat{
+  font-size:14px;font-weight:700;color:var(--ink);
+  font-variant-numeric:tabular-nums;
+}
+.app .app-foot .stat.red{color:var(--red)}
+.app .app-foot .stat.green{color:var(--green)}
+.app .app-foot .tag{font-size:9px;letter-spacing:0.18em}
+/* 横幅卡：监控 */
+.app.wide{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center}
+.app.wide .app-desc{margin-bottom:0}
+.app.wide .app-foot{border-top:none;padding-top:0}
+
+/* ============================================================
+   技术栈 + 页脚
+   ============================================================ */
+.tech-row{
+  display:flex;flex-wrap:wrap;gap:0;
+  border-top:2px solid var(--ink);
+  border-bottom:2px solid var(--ink);
+  padding:12px 0;margin-bottom:30px;
 }
 .tech-item{
-  display:flex;align-items:center;gap:10px;
-  padding:13px 18px;
-  border-right:1px solid var(--line);
-  border-bottom:1px solid var(--line);
   font-family:var(--font-mono);font-size:11px;color:var(--ink-2);
-  transition:all var(--ease);
-  cursor:default;
+  padding:4px 16px;border-right:1px solid var(--line);
+  letter-spacing:0.06em;
 }
-.tech-item .tno{font-size:9px;color:var(--ink-3)}
-.tech-item:hover{color:var(--accent);background:var(--paper-2)}
-.tech-item.hl{color:var(--accent);font-weight:700}
+.tech-item:last-child{border-right:none}
+.tech-item.hl{color:var(--red);font-weight:700}
+.tech-item .tno{color:var(--ink-3);margin-right:6px}
 
-/* ---- Manifest 宣言行 ---- */
-.manifest{
-  padding:36px 0 8px;
-  border-bottom:1px solid var(--line);
-}
-.manifest .line{
-  display:flex;gap:18px;align-items:baseline;
-  font-size:13px;color:var(--ink-2);line-height:2.1;
-}
-.manifest .dot{width:5px;height:5px;background:var(--accent);flex-shrink:0;transform:translateY(-2px)}
-.manifest .muted{color:var(--ink-3)}
-
-/* ---- Footer ---- */
 .footer{
+  border-top:2px solid var(--ink);
+  padding-top:14px;
   display:flex;justify-content:space-between;align-items:center;
-  padding:26px 0 46px;
   font-family:var(--font-mono);font-size:10px;color:var(--ink-3);
-  letter-spacing:0.12em;text-transform:uppercase;
+  letter-spacing:0.14em;text-transform:uppercase;
 }
 .footer .ver{color:var(--ink-2)}
 
-/* ---- Toast ---- */
+/* Toast */
 .toast-container{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
-.toast{padding:10px 20px;font-size:13px;font-weight:700;color:var(--paper);background:var(--ink);pointer-events:auto;animation:toastIn 0.3s var(--ease)}
-.toast.success{background:var(--teal)}
-.toast.error{background:var(--pink)}
+.toast{padding:10px 20px;font-size:13px;font-weight:700;color:#fff;background:var(--ink);pointer-events:auto;animation:toastIn 0.3s var(--ease)}
+.toast.success{background:var(--green)}
+.toast.error{background:var(--red)}
 @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-/* ============================================================
-   Layer 5: Responsive
-   ============================================================ */
-@media(max-width:900px){
-  .page{padding:0 24px}
-  .nav .nav-links{display:none}
-  .hero{padding:40px 0 30px}
-  .ticker{flex-wrap:wrap}
-  .ticker-item{flex-basis:50%;border-bottom:1px solid var(--line)}
-  .apps{grid-template-columns:repeat(2,1fr)}
-  .app-card:nth-child(4n){border-right:1px solid var(--line)}
-  .app-card:nth-child(2n){border-right:none}
-}
-@media(max-width:560px){
-  html{font-size:14px}
-  .page{padding:0 16px}
-  .masthead{padding:18px 0}
-  .brand-sub{display:none}
-  .hero-title{font-size:38px}
-  .ticker-item{flex-basis:100%;border-right:none}
+/* Responsive */
+@media(max-width:860px){
+  .page{padding:0 18px 40px}
+  .headline{grid-template-columns:1fr}
   .apps{grid-template-columns:1fr}
-  .app-card:nth-child(2n){border-right:none}
-  .app-card{min-height:170px}
-  .footer{flex-direction:column;gap:8px;align-items:flex-start}
+  .app.wide{grid-template-columns:1fr}
+  .navbar{flex-wrap:wrap}
+  .navbar a{flex:1 1 33%;border-bottom:1px solid var(--line)}
+  .navbar-right{padding-left:0;border-left:none;margin-top:6px}
+}
+@media(max-width:480px){
+  .navbar a{flex:1 1 50%}
+  .headline-title{font-size:24px}
 }
 </style>
 </head>
 <body>
 
-<div class="topline"></div>
 <div class="page">
 
-  <!-- ===== Masthead ===== -->
+  <!-- ===== 报头 ===== -->
   <header class="masthead">
-    <div class="brand">
-      <span class="brand-name">HERMES·STUDY</span>
-      <span class="brand-sub">个人项目集 / Personal Workspace</span>
+    <div class="masthead-top">
+      <span id="todayDate">----年--月--日</span>
+      <span>VOL.02 · NO.08</span>
+      <span>MORNING EDITION</span>
     </div>
-    <div style="display:flex;align-items:center;gap:26px">
-      <nav class="nav nav-links">
-        <a href="/stock"><span class="idx">01</span>情报站</a>
-        <a href="/memo"><span class="idx">02</span>Memo</a>
-        <a href="/music-player"><span class="idx">03</span>音乐</a>
-        <a href="/tools"><span class="idx">04</span>工具箱</a>
-      </nav>
-      <button class="theme-toggle" id="themeToggle" title="切换暗色模式" aria-label="切换暗色模式">
-        <svg id="iconSun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        <svg id="iconMoon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </button>
-    </div>
+    <h1 class="masthead-title">HERMES·<span class="amp">STUDY</span></h1>
+    <div class="masthead-sub">个 人 项 目 集 <span class="star">★</span> 数 字 工 作 台</div>
   </header>
 
-  <!-- ===== Hero ===== -->
-  <section class="hero">
-    <div class="hero-kicker">
-      <span class="tick"></span>
-      <span id="kickerLabel">PERSONAL WORKSPACE</span>
-      <span class="date" id="todayDate"></span>
+  <!-- ===== 栏目条 ===== -->
+  <nav class="navbar">
+    <a href="/stock"><span class="n-idx">01</span>情报站</a>
+    <a href="/memo"><span class="n-idx">02</span>Memo</a>
+    <a href="/music-player"><span class="n-idx">03</span>音乐</a>
+    <a href="/tools"><span class="n-idx">04</span>工具箱</a>
+    <a href="/monitor"><span class="n-idx">05</span>监控</a>
+    <div class="navbar-right">
+      <button class="theme-toggle" id="themeToggle" title="切换暗色模式" aria-label="切换暗色模式">
+        <svg id="iconSun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg id="iconMoon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
     </div>
-    <h1 class="hero-title">HERMES<br><span class="em">STUDY</span></h1>
-    <p class="hero-sub">
-      股市情报 · 笔记记忆 · 音乐陪伴 · 效率工具<br>
-      <span class="muted">一套自建的数字工作台，四个应用，一个入口。</span>
-    </p>
+  </nav>
+
+  <!-- ===== 头条 ===== -->
+  <section class="headline">
+    <div class="headline-main">
+      <div class="headline-label">Market · 市场行情</div>
+      <h2 class="headline-title" id="kickerLabel">把信息变成洞察，<br>把工具变成习惯</h2>
+      <div class="headline-quote">
+        <span class="headline-price" id="ssecPrice">--<span class="dec">.---</span></span>
+        <span class="headline-chg" id="ssecBadge">--</span>
+      </div>
+      <div class="headline-meta">
+        <span>SHANGHAI COMPOSITE · 上证指数</span>
+        <span class="live">实时行情</span>
+        <span id="chartTime">--:--</span>
+      </div>
+    </div>
+    <div class="headline-side">
+      <div class="side-item">
+        <div class="side-kicker"><em>◆</em> 备忘录 / Memo</div>
+        <div class="side-title"><span class="num" id="memoCount">--</span>条笔记</div>
+        <div class="side-desc">碎片笔记 · 知识沉淀，轻量即时持久</div>
+        <div class="side-stats">
+          <div class="side-stat"><div class="v red" id="memoCats">--</div><div class="l">分类</div></div>
+          <div class="side-stat"><div class="v" id="memoStat">--</div><div class="l">全部</div></div>
+        </div>
+      </div>
+      <div class="side-item">
+        <div class="side-kicker"><em>◆</em> 报馆声明 / About</div>
+        <div class="side-desc">股市情报 · 笔记记忆 · 音乐陪伴 · 效率工具 · 服务器监控<br>一套自建的数字工作台，五个应用，一个入口。</div>
+      </div>
+    </div>
   </section>
 
-  <!-- ===== Ticker ===== -->
-  <div class="ticker">
-    <div class="ticker-label"><span class="dot"></span>LIVE</div>
-    <div class="ticker-item">
-      <span class="name">上证指数</span>
-      <span class="val" id="ssecPrice">--.----</span>
-      <span class="chg" id="ssecBadge">--</span>
-      <span class="meta" id="chartTime">预览模式</span>
-    </div>
-    <div class="ticker-item">
-      <span class="name">Memo</span>
-      <span class="val" id="memoCount">--</span>
-      <span class="chg" id="memoCats">-- 分类</span>
-      <span class="meta">本地存储</span>
-    </div>
-  </div>
-
-  <!-- ===== Applications ===== -->
-  <div class="sec-head" id="apps">
+  <!-- ===== 应用豆腐块 ===== -->
+  <div class="section-head" id="apps">
     <span class="no">/01</span>
-    <span class="title">Applications 应用</span>
+    <span class="title">Applications</span>
     <span class="rule"></span>
-    <span class="count">04</span>
+    <span class="count">05</span>
   </div>
 
   <div class="apps">
+
     <!-- Memo -->
-    <a class="app-card teal" href="/memo">
-      <div class="card-top">
-        <span class="no">01</span>
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+    <a class="app" href="/memo">
+      <div class="app-head">
+        <span class="app-name">Memo<span class="colon">：</span>便签本</span>
+        <span class="app-no">NO.02</span>
       </div>
-      <div>
-        <div class="name">Memo</div>
-        <div class="desc">碎片笔记 · 知识沉淀<br>轻量 · 即时 · 持久</div>
-      </div>
-      <div class="foot">
-        <span class="stat"><small>条数</small><span class="accent-dot"></span><span id="memoStat">--</span></span>
-        <span class="tag">/笔记</span>
+      <div class="app-desc">碎片笔记 · 知识沉淀，轻量、即时、持久。<br>Markdown 编辑，分类标签作者三维护航。</div>
+      <div class="app-foot">
+        <span class="stat"><span id="memoStat2">--</span> 条</span>
+        <span class="tag">/笔记版</span>
       </div>
     </a>
 
     <!-- Music -->
-    <a class="app-card pink" href="/music-player">
-      <div class="card-top">
-        <span class="no">02</span>
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+    <a class="app" href="/music-player">
+      <div class="app-head">
+        <span class="app-name">音乐<span class="colon">：</span>播放器</span>
+        <span class="app-no">NO.03</span>
       </div>
-      <div>
-        <div class="name">Music Player</div>
-        <div class="desc">播放管理 · 心情电台<br>沉浸 · 个性 · 流畅</div>
-      </div>
-      <div class="foot">
-        <span class="stat"><small>版本</small><span class="accent-dot"></span>v2.4</span>
-        <span class="tag">/音乐</span>
+      <div class="app-desc">本地音乐全能播放，支持 .mflac / .ncm 加密格式。<br>智能推荐 · 三种浏览模式 · 双击即用。</div>
+      <div class="app-foot">
+        <span class="stat">v2.4</span>
+        <span class="tag">/音乐版</span>
       </div>
     </a>
 
     <!-- Tools -->
-    <a class="app-card blue" href="/tools">
-      <div class="card-top">
-        <span class="no">03</span>
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    <a class="app" href="/tools">
+      <div class="app-head">
+        <span class="app-name">工具箱<span class="colon">：</span>17 件</span>
+        <span class="app-no">NO.04</span>
       </div>
-      <div>
-        <div class="name">工具箱</div>
-        <div class="desc">17 个工具 · 5 大分类<br>实用 · 纯前端 · SPA</div>
-      </div>
-      <div class="foot">
-        <span class="stat"><small>工具</small><span class="accent-dot"></span>17</span>
-        <span class="tag">/效率</span>
+      <div class="app-desc">十七个开发工具，五大分类，开箱即用。<br>格式化 · 编码 · 网络 · 系统 · 趣味。</div>
+      <div class="app-foot">
+        <span class="stat">17 tools</span>
+        <span class="tag">/工具版</span>
       </div>
     </a>
 
     <!-- Stock -->
-    <a class="app-card amber" href="/stock" id="marketCard">
-      <div class="card-top">
-        <span class="no">04</span>
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v4h-4"/></svg>
+    <a class="app" href="/stock">
+      <div class="app-head">
+        <span class="app-name">情报站<span class="colon">：</span>行情</span>
+        <span class="app-no">NO.01</span>
       </div>
+      <div class="app-desc">大盘指数 · 热门板块 · 个股追踪 · 财经要闻。<br>实时采集，红涨绿跌。</div>
+      <div class="app-foot">
+        <span class="stat" id="ssecMini">--</span>
+        <span class="tag">/行情版</span>
+      </div>
+    </a>
+
+    <!-- Monitor -->
+    <a class="app wide" href="/monitor">
       <div>
-        <div class="name">情报站</div>
-        <div class="desc">行情追踪 · 涨跌提醒<br>实时 · 深度 · 智能</div>
+        <div class="app-head">
+          <span class="app-name">监控<span class="colon">：</span>运维台</span>
+          <span class="app-no">NO.05</span>
+        </div>
+        <div class="app-desc">服务器实时指标 · CPU / 内存 / 磁盘 / 负载，每 30 秒采集一次，趋势图表回溯 7 天。</div>
       </div>
-      <div class="foot">
-        <span class="stat"><small>上证</small><span class="accent-dot"></span><span id="ssecMini">--</span></span>
-        <span class="tag">/行情</span>
+      <div class="app-foot">
+        <span class="stat">NOC</span>
+        <span class="tag">/运维版</span>
       </div>
     </a>
   </div>
 
-  <!-- ===== Tech Stack ===== -->
-  <div class="sec-head" id="tech">
-    <span class="no">/02</span>
-    <span class="title">Tech Stack 技术栈</span>
-    <span class="rule"></span>
-    <span class="count">07</span>
-  </div>
-
-  <div class="tech">
+  <!-- ===== 技术栈 ===== -->
+  <div class="tech-row">
     <span class="tech-item"><span class="tno">01</span>Spring Boot 3.2</span>
     <span class="tech-item"><span class="tno">02</span>MyBatis</span>
     <span class="tech-item"><span class="tno">03</span>MySQL 8</span>
@@ -449,17 +487,11 @@ a{color:inherit;text-decoration:none}
     <span class="tech-item hl"><span class="tno">07</span>Editorial Design</span>
   </div>
 
-  <!-- ===== Manifest ===== -->
-  <div class="manifest">
-    <div class="line"><span class="dot"></span>Design Token 驱动 · 统一视觉语言 · 迭代式构建</div>
-    <div class="line"><span class="dot"></span>Spring Boot 3.2 + MyBatis 后端架构</div>
-    <div class="line"><span class="dot"></span>纯前端 SPA · 零依赖 · 即开即用 <span class="muted">/ MySQL 8.0 数据持久化</span></div>
-  </div>
-
-  <!-- ===== Footer ===== -->
+  <!-- ===== 页脚 ===== -->
   <footer class="footer">
     <span>&copy; 2026 hermes-study</span>
-    <span class="ver">v2.0 · editorial concept</span>
+    <span>DESIGNED &amp; BUILT WITH PATIENCE</span>
+    <span class="ver">v3.0 · daily edition</span>
   </footer>
 
 </div>
@@ -470,7 +502,7 @@ a{color:inherit;text-decoration:none}
 (function() {
   'use strict';
 
-  /* ---- Theme (shared key with other pages) ---- */
+  /* ---- Theme ---- */
   var theme = localStorage.getItem('hermes-theme') || 'light';
   function applyTheme(t) {
     document.documentElement.setAttribute('data-theme', t);
@@ -484,18 +516,14 @@ a{color:inherit;text-decoration:none}
     applyTheme(theme);
   });
 
-  /* ---- Date line (Asia/Shanghai) ---- */
-  function fmtDate() {
-    var d = new Date();
-    var pad = function(n){ return n < 10 ? '0' + n : '' + n; };
-    var week = ['SUN','MON','TUE','WED','THU','FRI','SAT'][d.getDay()];
-    return d.getFullYear() + '.' + pad(d.getMonth()+1) + '.' + pad(d.getDate()) + ' / ' + week;
-  }
-  document.getElementById('todayDate').textContent = fmtDate();
+  /* ---- Date (Asia/Shanghai) ---- */
+  var d = new Date();
+  var week = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'][d.getDay()];
+  var pad = function(n){ return n < 10 ? '0' + n : '' + n; };
+  document.getElementById('todayDate').textContent =
+    d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日 · ' + week;
 
-  var isFile = location.protocol === 'file:';
-
-  /* ---- Stock data (works when served by Spring Boot) ---- */
+  /* ---- Stock ---- */
   function loadStock() {
     fetch('/api/stock/hot')
       .then(function(r) { return r.json(); })
@@ -503,17 +531,21 @@ a{color:inherit;text-decoration:none}
         if (d.code !== 0 || !d.indices || !d.indices.length) return;
         var idx = d.indices[0];
         var up = idx.changePct >= 0;
-        document.getElementById('ssecPrice').textContent = idx.price.toFixed(2);
+        var intPart = Math.floor(idx.price);
+        document.getElementById('ssecPrice').innerHTML = intPart.toLocaleString() + '<span class="dec">' + (idx.price - intPart).toFixed(2).substring(1) + '</span>';
         var badge = document.getElementById('ssecBadge');
-        badge.className = 'chg ' + (up ? 'up' : 'down');
-        badge.textContent = (up ? '+' : '') + idx.changePct.toFixed(2) + '%';
-        document.getElementById('chartTime').textContent = '更新于 ' + new Date().toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'});
+        badge.className = 'headline-chg ' + (up ? 'up' : 'down');
+        badge.innerHTML = (up ? '▲' : '▼') + ' ' + (up ? '+' : '') + idx.changePct.toFixed(2) + '%';
+        document.getElementById('chartTime').textContent = '更新 ' + new Date().toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'});
         document.getElementById('ssecMini').textContent = idx.price.toFixed(2);
       })
-      .catch(function() {});
+      .catch(function() {
+        document.getElementById('chartTime').textContent = '行情离线';
+      });
   }
+  loadStock();
 
-  /* ---- Memo count ---- */
+  /* ---- Memo ---- */
   function loadMemo() {
     fetch('/api/memo/memos')
       .then(function(r) { return r.json(); })
@@ -521,20 +553,15 @@ a{color:inherit;text-decoration:none}
         if (!Array.isArray(memos)) return;
         var cats = {};
         memos.forEach(function(m) { if (m.categoryName) cats[m.categoryName] = 1; });
-        document.getElementById('memoStat').textContent = memos.length;
         document.getElementById('memoCount').textContent = memos.length;
-        document.getElementById('memoCats').textContent = Object.keys(cats).length + ' 分类';
+        document.getElementById('memoCats').textContent = Object.keys(cats).length;
+        document.getElementById('memoStat').textContent = memos.length;
+        var s2 = document.getElementById('memoStat2');
+        if (s2) s2.textContent = memos.length;
       })
       .catch(function() {});
   }
-
-  if (isFile) {
-    /* 本地预览：无后端，保持占位 */
-    document.getElementById('kickerLabel').textContent = 'PREVIEW — 本地预览版';
-  } else {
-    loadStock();
-    loadMemo();
-  }
+  loadMemo();
 })();
 </script>
 </body>

@@ -82,12 +82,19 @@ public class SupabaseClient {
             ZonedDateTime since = ZonedDateTime.now(java.time.ZoneOffset.UTC).minusHours(hours);
             String sinceStr = since.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
 
+            // 30秒采集一次 → hours*120 条；加缓冲系数 1.1；上限 7 天 20160 条
+            // Supabase 免费版单次请求最多返回 1000 行，取最新 N 条足够展示
+            int limit = Math.min(Math.max(hours * 132, 200), 21000);
+
             String url = config.getUrl() + "/rest/v1/server_metrics"
                     + "?select=*"
                     + "&created_at=gte." + sinceStr
-                    + "&order=created_at.asc";
+                    + "&order=created_at.desc"
+                    + "&limit=" + limit;
 
-            return doQuery(url);
+            List<MetricDTO> list = doQuery(url);
+            Collections.reverse(list);  // desc → asc
+            return list;
         } catch (Exception e) {
             log.error("Supabase queryHistory error", e);
             return Collections.emptyList();

@@ -3,179 +3,303 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>服务器监控 - Hermes Study</title>
+<title>NOC 监控台 · Server Monitor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <style>
+/* ============================================================
+   NOC — 运维监控大屏
+   深海军蓝黑 + 青色，数据指标墙，固定暗色
+   ============================================================ */
 :root {
-  --bg: #f0f2f7;
-  --bg-card: rgba(255,255,255,0.72);
-  --bg-card-solid: #ffffff;
-  --bg-hover: #f0f2f5;
-  --border: rgba(0,0,0,0.06);
-  --border-hover: rgba(37,99,235,0.25);
-  --text: #0f172a;
-  --text-sec: #475569;
-  --text-muted: #94a3b8;
-  --blue: #2563eb;
-  --blue-soft: #3b82f6;
-  --blue-bg: rgba(37,99,235,0.07);
-  --rise: #ef4444;
-  --fall: #22c55e;
-  --amber: #f59e0b;
-  --amber-bg: rgba(245,158,11,0.08);
-  --green: #1db954;
-  --green-bg: rgba(29,185,84,0.08);
-  --purple: #7c3aed;
-  --purple-bg: rgba(124,58,237,0.08);
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
-  --shadow-hover: 0 8px 30px rgba(0,0,0,0.08);
-  --shadow-glow: 0 0 40px rgba(37,99,235,0.06);
-  --ease: 200ms cubic-bezier(0.4,0,0.2,1);
-  --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-  --mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  --bg:        #0a0e17;   /* 深海军蓝黑 */
+  --bg-deep:   #060910;
+  --panel:     #101826;
+  --panel-2:   #16202f;
+  --line:      #1c2939;
+  --line-hi:   #2b3d55;
+  --text:      #dbe4f0;
+  --text-2:    #8fa3bf;
+  --text-3:    #4c5f7a;
+  --cyan:      #22d3ee;   /* NOC 青 */
+  --cyan-dim:  rgba(34,211,238,0.08);
+  --green:     #34d399;
+  --green-bg:  rgba(52,211,153,0.10);
+  --amber:     #fbbf24;
+  --amber-bg:  rgba(251,191,36,0.10);
+  --red:       #f87171;
+  --red-bg:    rgba(248,113,113,0.10);
+  --blue:      #60a5fa;
+  --purple:    #a78bfa;
+  --mono: 'JetBrains Mono', 'SF Mono', 'Consolas', 'PingFang SC', 'Microsoft YaHei', monospace;
+  --ease: 160ms cubic-bezier(0.4,0,0.2,1);
 }
 [data-theme="dark"] {
-  --bg: #0a0c14;
-  --bg-card: rgba(30,32,48,0.72);
-  --bg-card-solid: #1e2030;
-  --bg-hover: #1a1d2e;
-  --border: rgba(255,255,255,0.06);
-  --border-hover: rgba(96,165,250,0.3);
-  --text: #f1f5f9;
-  --text-sec: #94a3b8;
-  --text-muted: #475569;
-  --blue: #60a5fa;
-  --blue-soft: #93c5fd;
-  --blue-bg: rgba(96,165,250,0.08);
-  --rise: #f87171;
-  --fall: #4ade80;
-  --amber-bg: rgba(245,158,11,0.1);
-  --green-bg: rgba(29,185,84,0.1);
-  --purple-bg: rgba(167,139,250,0.1);
-  --shadow-card: 0 1px 3px rgba(0,0,0,0.2), 0 4px 16px rgba(0,0,0,0.15);
-  --shadow-hover: 0 8px 30px rgba(0,0,0,0.3);
-  --shadow-glow: 0 0 60px rgba(96,165,250,0.06);
+  --bg:        #070a12;
+  --bg-deep:   #04060a;
+  --panel:     #0c1320;
+  --panel-2:   #111a2a;
+  --line:      #16202e;
+  --line-hi:   #22324a;
+  --text:      #c9d6e6;
+  --text-2:    #778aa6;
+  --text-3:    #3d4e66;
 }
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:14px;scroll-behavior:smooth}
-body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{
+  font-family:var(--mono);
+  background:
+    radial-gradient(ellipse 70% 40% at 80% -10%, rgba(34,211,238,0.05), transparent),
+    var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--cyan);color:#031018}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--line-hi)}
+::-webkit-scrollbar-thumb:hover{background:var(--text-3)}
 
-.bg-orbs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.bg-orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.35;animation:orbFloat 20s ease-in-out infinite}
-.bg-orb:nth-child(1){width:500px;height:500px;background:var(--blue);top:-10%;left:-5%}
-.bg-orb:nth-child(2){width:400px;height:400px;background:#7c3aed;top:50%;right:-8%;animation-delay:-7s;animation-duration:25s}
-.bg-orb:nth-child(3){width:350px;height:350px;background:#06b6d4;bottom:-10%;left:30%;animation-delay:-14s;animation-duration:22s}
-@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-40px) scale(1.05)}66%{transform:translate(-20px,30px) scale(0.95)}}
-[data-theme="dark"] .bg-orb{opacity:0.12}
+/* 背景网格 */
+.bg-grid{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:52px 52px;
+  opacity:0.4;
+}
 
-.bg-dots{position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:radial-gradient(circle,var(--border) 1px,transparent 1px);
-  background-size:28px 28px}
+/* ============================================================
+   Header — 监控状态条
+   ============================================================ */
+.header{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  height:52px;padding:0 22px;
+  background:rgba(10,14,23,0.92);
+  border-bottom:1px solid var(--line-hi);
+}
+.header-left{display:flex;align-items:center;gap:14px;min-width:0}
+.back-btn{
+  width:30px;height:30px;flex-shrink:0;
+  border:1px solid var(--line-hi);background:var(--panel);
+  color:var(--text-2);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none;transition:all var(--ease);
+}
+.back-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.back-btn svg{width:14px;height:14px}
+.header-title{
+  font-size:13px;font-weight:800;letter-spacing:0.16em;
+  color:var(--text);white-space:nowrap;
+}
+.header-title .tag{
+  display:inline-block;margin-left:10px;padding:2px 9px;
+  font-size:9px;letter-spacing:0.2em;font-weight:700;
+  color:var(--green);border:1px solid rgba(52,211,153,0.4);
+  background:var(--green-bg);vertical-align:2px;
+}
+.header-sub{font-size:10px;color:var(--text-3);letter-spacing:0.2em;text-transform:uppercase;white-space:nowrap;margin-left:8px}
+.header-right{display:flex;align-items:center;gap:10px}
+.header-time{
+  font-size:12px;color:var(--cyan);letter-spacing:0.12em;
+  background:var(--panel);border:1px solid var(--line);
+  padding:5px 12px;font-variant-numeric:tabular-nums;
+}
+.theme-toggle{
+  width:30px;height:30px;border:1px solid var(--line-hi);background:var(--panel);
+  color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all var(--ease);
+}
+.theme-toggle:hover{border-color:var(--cyan);color:var(--cyan)}
+.theme-toggle svg{width:14px;height:14px}
 
-.header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:56px;backdrop-filter:blur(20px) saturate(1.6);background:var(--bg-card);border-bottom:1px solid var(--border)}
-.header-left{display:flex;align-items:center;gap:12px}
-.header-logo{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--blue),#7c3aed);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(37,99,235,0.25)}
-.header-logo svg{width:18px;height:18px;color:#fff}
-.header-title{font-size:15px;font-weight:600;letter-spacing:-0.3px}
-.header-right{display:flex;align-items:center;gap:12px}
-.theme-toggle{width:34px;height:34px;border-radius:var(--radius-sm);border:1px solid var(--border);background:transparent;color:var(--text-sec);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all var(--ease)}
-.theme-toggle:hover{border-color:var(--border-hover);color:var(--blue);background:var(--blue-bg);transform:scale(1.05)}
-.back-link{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);color:var(--text-sec);text-decoration:none;font-size:12px;font-weight:500;transition:all var(--ease)}
-.back-link:hover{border-color:var(--border-hover);color:var(--blue);background:var(--blue-bg)}
-.back-link svg{width:14px;height:14px}
+/* ============================================================
+   Main
+   ============================================================ */
+.main{
+  position:relative;z-index:1;
+  max-width:1080px;margin:0 auto;padding:32px 22px 60px;
+}
 
-.main{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:40px 32px 80px}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+/* ---- Page header ---- */
+.page-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:26px;flex-wrap:wrap;gap:12px;
+}
+.page-header h1{
+  font-size:16px;font-weight:800;letter-spacing:0.1em;
+  display:flex;align-items:center;gap:12px;color:var(--text);
+}
+.page-header h1 .icon{
+  width:34px;height:34px;border:1px solid var(--line-hi);
+  background:var(--panel);display:flex;align-items:center;justify-content:center;
+  color:var(--cyan);
+}
+.page-header h1 .icon svg{width:17px;height:17px}
+.status-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 16px;font-size:11px;font-weight:800;letter-spacing:0.1em;
+  border:1px solid var(--line-hi);
+}
+.status-badge.online{background:var(--green-bg);color:var(--green);border-color:rgba(52,211,153,0.35)}
+.status-badge.offline{background:var(--amber-bg);color:var(--amber);border-color:rgba(251,191,36,0.35)}
+.status-dot{width:7px;height:7px;border-radius:50%;display:inline-block;animation:pulse 2s ease-in-out infinite}
+.status-dot.online{background:var(--green);box-shadow:0 0 8px rgba(52,211,153,0.6)}
+.status-dot.offline{background:var(--amber);box-shadow:0 0 8px rgba(251,191,36,0.6)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
 
-.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;animation:fadeUp 0.6s var(--ease) both}
-.page-header h1{font-size:22px;font-weight:700;display:flex;align-items:center;gap:10px;letter-spacing:-0.3px}
-.page-header h1 svg{width:22px;height:22px;color:var(--blue)}
-.status-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:999px;font-size:12px;font-weight:500}
-.status-badge.online{background:var(--green-bg);color:var(--green)}
-.status-badge.offline{background:var(--amber-bg);color:var(--amber)}
-.status-dot{width:6px;height:6px;border-radius:50%;display:inline-block;animation:pulse 2s ease-in-out infinite}
-.status-dot.online{background:var(--green)}
-.status-dot.offline{background:var(--amber)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;animation:fadeUp 0.6s var(--ease) both;animation-delay:0.05s}
-.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 24px;backdrop-filter:blur(12px);transition:all var(--ease)}
-.card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-hover),var(--shadow-glow);transform:translateY(-2px)}
-.card .label{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
-.card .value{font-size:28px;font-weight:700;line-height:1.1;display:flex;align-items:baseline;gap:4px}
-.card .value .unit{font-size:13px;font-weight:500;color:var(--text-muted)}
-.card .sub{font-size:12px;color:var(--text-muted);margin-top:4px}
-.card .sub .num{color:var(--text-sec);font-weight:500}
-.card .progress-bar{width:100%;height:4px;background:var(--bg);border-radius:2px;margin-top:14px;overflow:hidden}
-.card .progress-bar .fill{height:100%;border-radius:2px;transition:width 0.5s ease}
-.fill-low{background:var(--fall)}
+/* ---- 指标卡片墙 ---- */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:26px}
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  padding:20px 22px 18px;
+  transition:all var(--ease);
+  position:relative;
+  overflow:hidden;
+}
+.card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  opacity:0.75;
+}
+.card-cpu::before{background:var(--blue)}
+.card-mem::before{background:var(--green)}
+.card-dsk::before{background:var(--amber)}
+.card-load::before{background:var(--purple)}
+.card:hover{border-color:var(--line-hi);transform:translateY(-2px)}
+.card .label{
+  font-size:9px;font-weight:700;color:var(--text-3);
+  text-transform:uppercase;letter-spacing:0.18em;margin-bottom:10px;
+}
+.card .value{
+  font-size:32px;font-weight:800;line-height:1;
+  display:flex;align-items:baseline;gap:6px;
+  font-variant-numeric:tabular-nums;
+}
+.card .value .unit{font-size:13px;font-weight:600;color:var(--text-3)}
+.card-cpu .value{color:var(--blue);text-shadow:0 0 20px rgba(96,165,250,0.25)}
+.card-mem .value{color:var(--green);text-shadow:0 0 20px rgba(52,211,153,0.25)}
+.card-dsk .value{color:var(--amber);text-shadow:0 0 20px rgba(251,191,36,0.25)}
+.card-load .value{color:var(--purple);text-shadow:0 0 20px rgba(167,139,250,0.25)}
+.card .sub{font-size:11px;color:var(--text-3);margin-top:8px}
+.card .sub .num{color:var(--text-2);font-weight:600}
+.card .progress-bar{
+  width:100%;height:5px;background:var(--bg-deep);
+  margin-top:14px;overflow:hidden;border:1px solid var(--line);
+}
+.card .progress-bar .fill{height:100%;transition:width 0.5s ease}
+.fill-low{background:var(--green)}
 .fill-mid{background:var(--amber)}
-.fill-high{background:var(--rise)}
-.card-cpu .value{color:var(--blue)}
-.card-mem .value{color:var(--green)}
-.card-dsk .value{color:var(--amber)}
-.card-load .value{color:var(--purple)}
+.fill-high{background:var(--red)}
 
-.chart-section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 24px;backdrop-filter:blur(12px);animation:fadeUp 0.6s var(--ease) both;animation-delay:0.1s;transition:all var(--ease)}
-.chart-section:hover{border-color:var(--border-hover);box-shadow:var(--shadow-hover),var(--shadow-glow)}
-.chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
-.chart-header h3{font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px}
-.chart-header h3 svg{width:16px;height:16px;color:var(--blue)}
-.chart-tabs{display:flex;gap:4px;background:var(--bg);border-radius:var(--radius-sm);padding:3px}
-.chart-tabs .tab{padding:5px 14px;border-radius:4px;font-size:12px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--text-muted);transition:all var(--ease);white-space:nowrap}
-.chart-tabs .tab.active{background:var(--bg-card-solid);color:var(--blue);box-shadow:0 1px 2px rgba(0,0,0,0.06)}
-.chart-tabs .tab:hover:not(.active){color:var(--text-sec)}
+/* ---- 图表区 ---- */
+.chart-section{
+  background:var(--panel);
+  border:1px solid var(--line);
+  padding:20px 22px;
+  transition:border-color var(--ease);
+}
+.chart-section:hover{border-color:var(--line-hi)}
+.chart-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;flex-wrap:wrap;gap:10px;
+}
+.chart-header h3{
+  font-size:13px;font-weight:800;letter-spacing:0.06em;
+  display:flex;align-items:center;gap:8px;color:var(--text);
+}
+.chart-header h3 svg{width:15px;height:15px;color:var(--cyan)}
+.chart-tabs{display:flex;gap:2px;background:var(--bg-deep);padding:3px;border:1px solid var(--line)}
+.chart-tabs .tab{
+  padding:4px 13px;font-size:11px;font-weight:700;cursor:pointer;
+  border:none;background:transparent;color:var(--text-3);
+  transition:all var(--ease);white-space:nowrap;font-family:var(--mono);
+}
+.chart-tabs .tab.active{
+  background:var(--cyan);color:#031018;
+  box-shadow:0 0 12px rgba(34,211,238,0.3);
+}
+.chart-tabs .tab:hover:not(.active){color:var(--text)}
 .chart-box{width:100%;height:320px;min-height:320px;position:relative}
 .chart-box svg{width:100%;height:100%;display:block}
 
-.info-bar{display:flex;align-items:center;gap:16px;margin-top:12px;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm);font-size:12px;color:var(--text-muted);border:1px solid var(--border);animation:fadeUp 0.6s var(--ease) both;animation-delay:0.15s;flex-wrap:wrap;gap:8px}
-.info-bar svg{width:14px;height:14px;color:var(--blue);flex-shrink:0}
+/* ---- 信息栏 ---- */
+.info-bar{
+  display:flex;align-items:center;gap:16px;
+  margin-top:14px;padding:12px 16px;
+  background:var(--bg-deep);border:1px solid var(--line);
+  font-size:11px;color:var(--text-3);flex-wrap:wrap;
+  font-family:var(--mono);
+}
+.info-bar svg{width:13px;height:13px;color:var(--cyan);flex-shrink:0}
 .info-bar span{display:flex;align-items:center;gap:4px}
-.info-bar .sep{width:1px;height:12px;background:var(--border)}
+.info-bar .sep{width:1px;height:12px;background:var(--line-hi)}
+.info-bar strong{color:var(--amber);font-weight:700}
+.info-bar a{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border:1px solid var(--line);
+  color:var(--text-3);text-decoration:none;font-size:10px;
+  transition:all var(--ease);
+}
+.info-bar a:hover{border-color:var(--cyan);color:var(--cyan);background:var(--cyan-dim)}
+.info-bar button{
+  padding:4px 10px;border:1px solid var(--line);
+  background:transparent;color:var(--text-3);font-size:10px;
+  cursor:pointer;transition:all var(--ease);
+  display:flex;align-items:center;gap:4px;font-family:var(--mono);
+}
+.info-bar button:hover{border-color:var(--red);color:var(--red)}
 
-.footer{position:relative;z-index:1;text-align:center;padding:32px;font-size:12px;color:var(--text-muted)}
-.footer a{color:var(--blue);text-decoration:none;font-weight:500;transition:opacity var(--ease)}
+/* ---- Footer ---- */
+.footer{
+  position:relative;z-index:1;text-align:center;
+  padding:28px;font-size:11px;color:var(--text-3);letter-spacing:0.08em;
+}
+.footer a{color:var(--cyan);text-decoration:none;font-weight:700;transition:opacity var(--ease)}
+.footer a:hover{opacity:0.8}
 
-@media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}}
+/* ---- Responsive ---- */
+@media(max-width:900px){
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .header-sub{display:none}
+  .main{padding:24px 14px 50px}
+}
 @media(max-width:640px){
-  .header{padding:0 16px;height:48px}
-  .main{padding:24px 16px 60px}
-  .page-header{flex-direction:column;align-items:flex-start;gap:12px}
-  .cards{grid-template-columns:1fr;gap:12px}
-  .card{padding:16px 20px;overflow:hidden}
-  .card .value{font-size:24px}
-  .chart-section{padding:16px}
-  .info-bar{gap:6px;font-size:11px}
+  .header{padding:0 14px}
+  .header-time{font-size:11px}
+  .page-header{flex-direction:column;align-items:flex-start;gap:10px}
+  .cards{grid-template-columns:1fr;gap:10px}
+  .card{padding:16px 18px}
+  .card .value{font-size:26px}
+  .chart-section{padding:14px}
+  .info-bar{gap:6px;font-size:10px}
 }
 </style>
 </head>
 <body>
-<div class="bg-orbs">
-  <div class="bg-orb"></div>
-  <div class="bg-orb"></div>
-  <div class="bg-orb"></div>
-</div>
-<div class="bg-dots"></div>
+<div class="bg-grid"></div>
 
 <div id="app">
   <header class="header">
     <div class="header-left">
-      <a class="back-link" href="/" style="margin-right:4px">
+      <a class="back-btn" href="/" title="返回首页" aria-label="返回首页" style="text-decoration:none">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
       </a>
-      <div class="header-logo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/><line x1="12" y1="22" x2="12" y2="15.5"/><polyline points="22 8.5 12 15.5 2 8.5"/></svg>
-      </div>
-      <span class="header-title">服务器监控</span>
+      <span class="header-title">NOC CONSOLE<span class="tag">MONITOR</span></span>
+      <span class="header-sub">运维监控台</span>
     </div>
     <div class="header-right">
-      <button class="theme-toggle" id="themeToggle" title="切换暗色模式">
-        <svg id="iconSun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        <svg id="iconMoon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <span class="header-time" id="clock"></span>
+      <button class="theme-toggle" id="themeToggle" title="切换终端亮度">
+        <svg id="iconSun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg id="iconMoon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
     </div>
   </header>
@@ -183,8 +307,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   <div class="main">
     <div class="page-header">
       <h1>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        服务器监控
+        <span class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </span>
+        服务器监控 / SERVER MONITOR
       </h1>
       <div class="status-badge online" id="statusBadge">
         <span class="status-dot online" id="statusDot"></span>
@@ -223,7 +349,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <div class="chart-header">
         <h3>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          趋势图表
+          趋势图表 / TREND
         </h3>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
           <div class="chart-tabs" id="timeRangeTabs">
@@ -254,15 +380,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <span class="sep"></span>
       <span>最后更新: <strong id="lastUpdate">--:--:--</strong></span>
       <span style="flex:1"></span>
-      <a href="https://home.console.aliyun.com/home/dashboard/" target="_blank" rel="noopener"
-         style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-muted);text-decoration:none;font-size:11px;transition:all var(--ease);cursor:pointer"
-         onmouseover="this.style.borderColor='var(--border-hover)';this.style.color='var(--blue)';this.style.background='var(--blue-bg)'"
-         onmouseout="this.style.borderColor='';this.style.color='';this.style.background=''">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+      <a href="https://home.console.aliyun.com/home/dashboard/" target="_blank" rel="noopener">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
         阿里云
       </a>
-      <button id="cleanupBtn" style="padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-muted);font-size:11px;cursor:pointer;transition:all var(--ease);display:flex;align-items:center;gap:4px">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+      <button id="cleanupBtn">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
         清理旧数据
       </button>
     </div>
@@ -277,26 +400,20 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 (function() {
   'use strict';
 
-  // ===== 暗色主题 =====
+  // ===== 暗色主题（NOC 固定暗色，两档亮度） =====
   var theme = localStorage.getItem('hermes-theme') || 'light';
-  function applyTheme(t) {
-    if (t === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      document.getElementById('iconSun').style.display = 'none';
-      document.getElementById('iconMoon').style.display = 'block';
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-      document.getElementById('iconSun').style.display = 'block';
-      document.getElementById('iconMoon').style.display = 'none';
-    }
+  document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+
+  // ===== 时钟 =====
+  function updateClock() {
+    var now = new Date();
+    document.getElementById('clock').textContent =
+      String(now.getHours()).padStart(2,'0') + ':' +
+      String(now.getMinutes()).padStart(2,'0') + ':' +
+      String(now.getSeconds()).padStart(2,'0');
   }
-  applyTheme(theme);
-  document.getElementById('themeToggle').addEventListener('click', function() {
-    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    theme = isDark ? 'light' : 'dark';
-    localStorage.setItem('hermes-theme', theme);
-    applyTheme(theme);
-  });
+  updateClock();
+  setInterval(updateClock, 1000);
 
   // ===== 状态 =====
   var currentField = 'cpu';
@@ -316,6 +433,18 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
            String(d.getMinutes()).padStart(2,'0') + ':' +
            String(d.getSeconds()).padStart(2,'0');
   }
+  /* X 轴标签：跨天（>6h）显示 月-日 时:分，短时段只显示 时:分 */
+  function fmtAxisTime(iso) {
+    if (!iso) return '';
+    var d = new Date(iso);
+    var hh = String(d.getHours()).padStart(2,'0');
+    var mm = String(d.getMinutes()).padStart(2,'0');
+    if (currentHours > 6) {
+      var md = String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+      return md + ' ' + hh + ':' + mm;
+    }
+    return hh + ':' + mm;
+  }
 
   // ===== SVG 图表渲染 =====
   var MARGIN = { top: 10, right: 20, bottom: 30, left: 50 };
@@ -324,6 +453,17 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   function renderChart(field, data) {
     var svg = document.getElementById('chartSvg');
     if (!svg || data.length === 0) return;
+
+    // 降采样：超过 600 点等间隔抽样（保留首尾），保证大数据量流畅
+    if (data.length > 600) {
+      var step = data.length / 600;
+      var sampled = [];
+      for (var si = 0; si < data.length; si += step) {
+        sampled.push(data[Math.floor(si)]);
+      }
+      if (sampled[sampled.length - 1] !== data[data.length - 1]) sampled.push(data[data.length - 1]);
+      data = sampled;
+    }
 
     // 清空
     svg.innerHTML = '';
@@ -352,7 +492,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         if (v != null) allVals.push(+v);
       });
     });
-    if (allVals.length === 0) { svg.innerHTML = '<text x="450" y="150" text-anchor="middle" fill="#94a3b8" font-size="13">暂无数据</text>'; return; }
+    if (allVals.length === 0) { svg.innerHTML = '<text x="450" y="150" text-anchor="middle" fill="#4c5f7a" font-size="13">NO DATA</text>'; return; }
 
     var yMin = Math.min.apply(null, allVals);
     var yMax = Math.max.apply(null, allVals);
@@ -362,7 +502,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     yMax = yMax + yRange * 0.1;
 
     // 时间标签
-    var times = data.map(function(d) { return fmtTime(d.created_at); });
+    var times = data.map(function(d) { return fmtAxisTime(d.created_at); });
 
     // 画网格线 (水平)
     var gridLines = 5;
@@ -374,7 +514,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       line.setAttribute('y1', y);
       line.setAttribute('x2', SVG_W - MARGIN.right);
       line.setAttribute('y2', y);
-      line.setAttribute('stroke', 'var(--border)');
+      line.setAttribute('stroke', 'var(--line)');
       line.setAttribute('stroke-width', '1');
       ns.appendChild(line);
 
@@ -383,23 +523,26 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       label.setAttribute('x', MARGIN.left - 8);
       label.setAttribute('y', y + 4);
       label.setAttribute('text-anchor', 'end');
-      label.setAttribute('fill', '#94a3b8');
+      label.setAttribute('fill', '#5c6f8a');
       label.setAttribute('font-size', '11');
       label.textContent = field === 'load' && fields.length === 1 ? val.toFixed(1) : Math.round(val);
       ns.appendChild(label);
     }
 
-    // 画数据线
-    var stepX = plotW / Math.max(data.length - 1, 1);
-
+    // 画数据线：X 轴按选定时间范围映射
+    // 数据不足时数据线只占右侧，但刻度覆盖完整选定时段（7天能看到完整日期轴）
+    var latestT = new Date(data[data.length - 1].created_at).getTime();
+    var xMinT = latestT - currentHours * 3600 * 1000;
+    var xMaxT = latestT;
+    function xPos(t) { return MARGIN.left + (t - xMinT) / (xMaxT - xMinT) * plotW; }
     function yPos(v) { return MARGIN.top + plotH - ((v - yMin) / (yMax - yMin)) * plotH; }
 
     fields.forEach(function(f) {
       var pts = [];
-      data.forEach(function(d, idx) {
+      data.forEach(function(d) {
         var v = d[f.key];
         if (v == null) return;
-        pts.push({ x: MARGIN.left + idx * stepX, y: yPos(+v) });
+        pts.push({ x: xPos(new Date(d.created_at).getTime()), y: yPos(+v) });
       });
       if (pts.length < 2) return;
 
@@ -432,24 +575,24 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       dot.setAttribute('cx', last.x);
       dot.setAttribute('cy', last.y);
       dot.setAttribute('r', '3.5');
-      dot.setAttribute('fill', '#fff');
+      dot.setAttribute('fill', '#0a0e17');
       dot.setAttribute('stroke', f.color);
       dot.setAttribute('stroke-width', '2');
       ns.appendChild(dot);
     });
 
-    // x轴时间标签（间隔显示，避免太挤）
-    var maxLabels = Math.min(data.length, Math.floor(plotW / 80));
-    var labelStep = Math.max(1, Math.floor(data.length / maxLabels));
-    for (var k = 0; k < data.length; k += labelStep) {
-      var xl = MARGIN.left + k * stepX;
+    // x轴时间刻度：按选定时间范围均匀分布（跨天显示日期）
+    var tickCount = Math.min(10, Math.max(5, Math.floor(plotW / 90)));
+    for (var k = 0; k <= tickCount; k++) {
+      var tt = xMinT + (xMaxT - xMinT) * k / tickCount;
+      var xl = xPos(tt);
       var lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       lbl.setAttribute('x', xl);
       lbl.setAttribute('y', SVG_H - 5);
       lbl.setAttribute('text-anchor', 'middle');
-      lbl.setAttribute('fill', '#9ca3af');
+      lbl.setAttribute('fill', '#5c6f8a');
       lbl.setAttribute('font-size', '10');
-      lbl.textContent = times[k];
+      lbl.textContent = fmtAxisTime(new Date(tt).toISOString());
       ns.appendChild(lbl);
     }
 
@@ -499,72 +642,53 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         } else { setOnline(false); }
       })
       .catch(function() { setOnline(false); });
+  }
 
+  function loadHistory() {
     fetch('/api/monitor/history?hours=' + currentHours)
       .then(function(r) { return r.json(); })
       .then(function(d) {
-        if (d.code === 0 && d.data && d.data.length > 0) {
-          historyData = d.data;
-          renderChart(currentField, d.data);
+        if (d.code === 0) {
+          historyData = d.data || [];
+          renderChart(currentField, historyData);
         }
       })
       .catch(function() {});
   }
 
   // ===== 事件绑定 =====
-  document.getElementById('chartTabs').addEventListener('click', function(e) {
-    var tab = e.target.closest('.tab');
-    if (!tab) return;
-    document.querySelectorAll('#chartTabs .tab').forEach(function(t) { t.classList.remove('active'); });
-    tab.classList.add('active');
-    currentField = tab.dataset.field;
-    if (historyData.length > 0) renderChart(currentField, historyData);
+  document.querySelectorAll('#timeRangeTabs .tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('#timeRangeTabs .tab').forEach(function(t) { t.classList.remove('active'); });
+      this.classList.add('active');
+      currentHours = parseInt(this.dataset.hours);
+      loadHistory();
+    });
   });
 
-  document.getElementById('timeRangeTabs').addEventListener('click', function(e) {
-    var tab = e.target.closest('.tab');
-    if (!tab) return;
-    document.querySelectorAll('#timeRangeTabs .tab').forEach(function(t) { t.classList.remove('active'); });
-    tab.classList.add('active');
-    currentHours = parseInt(tab.dataset.hours);
-    fetch('/api/monitor/history?hours=' + currentHours)
+  document.querySelectorAll('#chartTabs .tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('#chartTabs .tab').forEach(function(t) { t.classList.remove('active'); });
+      this.classList.add('active');
+      currentField = this.dataset.field;
+      renderChart(currentField, historyData);
+    });
+  });
+
+  document.getElementById('cleanupBtn').addEventListener('click', function() {
+    if (!confirm('确定清理全部历史监控数据？')) return;
+    fetch('/api/monitor/cleanup', { method: 'POST' })
       .then(function(r) { return r.json(); })
       .then(function(d) {
-        if (d.code === 0 && d.data) {
-          historyData = d.data;
-          renderChart(currentField, d.data);
-        }
+        if (d.code === 0) { historyData = []; renderChart(currentField, []); }
       })
       .catch(function() {});
   });
 
-  // ===== 手动清理 =====
-  document.getElementById('cleanupBtn').addEventListener('click', function() {
-    var btn = this;
-    if (btn.disabled) return;
-    if (!confirm('确认删除 7 天前的历史数据？此操作不可撤销。')) return;
-    btn.disabled = true;
-    btn.innerHTML = '清理中...';
-    fetch('/api/monitor/cleanup', { method: 'POST' })
-      .then(function(r) { return r.json(); })
-      .then(function(d) {
-        if (d.code === 0) {
-          alert(d.data || '清理完成');
-          loadData();
-        } else {
-          alert(d.msg || '清理失败');
-        }
-      })
-      .catch(function() { alert('请求失败'); })
-      .finally(function() {
-        btn.disabled = false;
-        btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> 清理旧数据';
-      });
-  });
-
   // ===== 启动 =====
   loadData();
-  setInterval(loadData, 10_000);
+  loadHistory();
+  setInterval(loadData, 30000);
 })();
 </script>
 </body>

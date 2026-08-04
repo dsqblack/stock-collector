@@ -722,7 +722,7 @@ window.http12_clear=function(){
    TOOL 13: UUID/密码
    ============================================================ */
 window.uuid13_gen=function(){
-  var uuid=crypto.randomUUID();
+  var uuid=genUUID();
   $('uuid13_list').innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--border)"><span>'+uuid+'</span><button class="btn-icon" onclick="navigator.clipboard.writeText(\''+uuid+'\').then(function(){toast(\'已复制\',\'success\')})" style="font-size:12px">&#x1F4CB;</button></div>';
 };
 window.uuid13_batch=function(){
@@ -730,11 +730,24 @@ window.uuid13_batch=function(){
   if(n>50)n=50;
   var html='';
   for(var i=0;i<n;i++){
-    var uuid=crypto.randomUUID();
+    var uuid=genUUID();
     html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid var(--border)"><span>'+(i+1)+'. '+uuid+'</span><button class="btn-icon" onclick="navigator.clipboard.writeText(\''+uuid+'\').then(function(){toast(\'已复制\',\'success\')})" style="font-size:12px">&#x1F4CB;</button></div>';
   }
   $('uuid13_list').innerHTML=html;
 };
+/* UUID v4 生成：crypto.randomUUID() 仅安全上下文可用（HTTPS/localhost），
+   IP 访问时 fallback 到 getRandomValues 实现 RFC4122 v4 */
+function genUUID(){
+  if (window.crypto && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+  var c = crypto.getRandomValues(new Uint8Array(16));
+  c[6] = (c[6] & 0x0f) | 0x40;
+  c[8] = (c[8] & 0x3f) | 0x80;
+  var hex = '';
+  for (var i = 0; i < 16; i++) {
+    hex += (c[i] < 16 ? '0' : '') + c[i].toString(16);
+  }
+  return hex.slice(0,8) + '-' + hex.slice(8,12) + '-' + hex.slice(12,16) + '-' + hex.slice(16,20) + '-' + hex.slice(20);
+}
 window.pwd13_gen=function(){
   var len=parseInt($('pwd13_length').value)||16;
   var sets=[];
